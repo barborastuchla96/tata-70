@@ -1,413 +1,725 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="cs">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Singa B2B — Ad Experimentation Framework</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+  <title>Za krávami a čokoládou</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #0A0A0F; color: #F0F0FF; font-family: Georgia, serif; }
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #12121A; }
-    ::-webkit-scrollbar-thumb { background: #2A2A3E; border-radius: 3px; }
-    ol, ul { padding-left: 1.2em; }
+
+    :root {
+      --green-dark: #27500A;
+      --green-mid: #3B6D11;
+      --green-light: #EAF3DE;
+      --green-border: #639922;
+      --green-mid2: #C0DD97;
+      --amber-dark: #633806;
+      --amber-mid: #BA7517;
+      --amber-light: #FAEEDA;
+      --amber-mid2: #FAC775;
+      --stone: #D3D1C7;
+      --stone-mid: #888780;
+      --blue-light: #E6F1FB;
+      --blue-mid: #378ADD;
+      --blue-dark: #0C447C;
+      --pink-light: #FBEAF0;
+      --pink-dark: #72243E;
+      --text: #1a1a18;
+      --text-secondary: #5F5E5A;
+      --border: rgba(44,44,42,0.15);
+      --border-hover: rgba(44,44,42,0.28);
+      --bg: #f7f5f0;
+      --bg-card: #ffffff;
+      --bg-secondary: #f1efe8;
+      --radius-md: 8px;
+      --radius-lg: 14px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --text: #f0ede6;
+        --text-secondary: #b4b2a9;
+        --border: rgba(240,237,230,0.12);
+        --border-hover: rgba(240,237,230,0.25);
+        --bg: #1c1b18;
+        --bg-card: #242320;
+        --bg-secondary: #2c2c2a;
+        --green-light: #173404;
+        --green-dark: #C0DD97;
+        --green-mid: #97C459;
+        --amber-light: #412402;
+        --amber-dark: #FAC775;
+        --blue-light: #042C53;
+        --blue-dark: #85B7EB;
+        --pink-light: #4B1528;
+        --pink-dark: #F4C0D1;
+        --stone: #2C2C2A;
+        --stone-mid: #B4B2A9;
+        --amber-mid2: #854F0B;
+      }
+    }
+
+    html { font-size: 16px; }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      font-weight: 300;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.7;
+    }
+
+    .wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 2.5rem 1.25rem 4rem;
+    }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 3rem 1rem 2.5rem;
+      margin-bottom: 2.5rem;
+      border-bottom: 0.5px solid var(--border);
+    }
+
+    .hero-eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--green-mid);
+      margin-bottom: 0.75rem;
+      font-weight: 400;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.9rem, 5vw, 2.6rem);
+      font-weight: 400;
+      line-height: 1.15;
+      color: var(--text);
+    }
+
+    .mountain-svg {
+      width: 100%;
+      max-width: 360px;
+      margin: 2rem auto 0;
+      display: block;
+      opacity: 0.85;
+    }
+
+    /* Timeline */
+    .timeline-strip {
+      margin: 2.25rem 0 0;
+      padding: 0 0.5rem;
+    }
+
+    .tl-track {
+      display: flex;
+      position: relative;
+    }
+
+    .tl-track::before {
+      content: '';
+      position: absolute;
+      top: 7px;
+      left: 7px;
+      right: 7px;
+      height: 1.5px;
+      background: var(--border);
+      z-index: 0;
+    }
+
+    .tl-step {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 7px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tl-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--green-light);
+      border: 2px solid var(--green-border);
+      flex-shrink: 0;
+    }
+
+    .tl-dot-race { background: var(--stone); border-color: var(--stone-mid); }
+    .tl-dot-travel { background: var(--blue-light); border-color: var(--blue-mid); }
+    .tl-dot-stop { background: var(--amber-light); border-color: var(--amber-mid); }
+
+    .tl-date {
+      font-size: 10px;
+      font-family: 'Playfair Display', serif;
+      color: var(--text);
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    .tl-label {
+      font-size: 9.5px;
+      color: var(--text-secondary);
+      text-align: center;
+      line-height: 1.35;
+    }
+
+    /* Sections */
+    .sections { display: flex; flex-direction: column; gap: 1.25rem; }
+
+    .section-block {
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: var(--bg-card);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.25rem;
+      cursor: pointer;
+      user-select: none;
+      background: var(--bg-secondary);
+      gap: 12px;
+      transition: background 0.15s;
+    }
+
+    .section-header:hover { background: var(--border); }
+
+    .section-meta { display: flex; align-items: center; gap: 12px; }
+
+    .section-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 16px;
+    }
+
+    .ig { background: var(--green-light); }
+    .ia { background: var(--amber-light); }
+    .is { background: var(--stone); }
+    .ib { background: var(--blue-light); }
+    .ip { background: var(--pink-light); }
+    .ibeer { background: var(--amber-mid2); }
+
+    .section-label {
+      font-size: 11px;
+      color: var(--text-secondary);
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      margin-bottom: 2px;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 400;
+      color: var(--text);
+    }
+
+    .chevron {
+      font-size: 22px;
+      color: var(--text-secondary);
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+
+    .section-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .section-body.open { max-height: 2000px; }
+
+    .section-inner {
+      padding: 1.5rem 1.5rem 1.75rem;
+      border-top: 0.5px solid var(--border);
+    }
+
+    .section-inner p {
+      font-size: 15px;
+      line-height: 1.85;
+      color: var(--text);
+      margin-bottom: 0.9rem;
+    }
+
+    .section-inner p:last-child { margin-bottom: 0; }
+
+    /* Highlight boxes */
+    .hl-amber {
+      background: var(--amber-light);
+      border-left: 3px solid var(--amber-mid);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      padding: 0.9rem 1.1rem;
+      margin: 1rem 0;
+      font-size: 14px;
+      color: var(--amber-dark);
+      line-height: 1.7;
+    }
+
+    /* Options */
+    .option-grid { display: flex; flex-direction: column; gap: 10px; margin: 1rem 0; }
+
+    .option {
+      border-radius: var(--radius-md);
+      padding: 0.9rem 1rem;
+    }
+
+    .option-a { background: var(--green-light); }
+    .option-b { background: var(--blue-light); }
+
+    .option-tag {
+      display: inline-block;
+      font-size: 10px;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      border-radius: 20px;
+      padding: 2px 9px;
+      margin-bottom: 6px;
+    }
+
+    .tag-green { background: var(--green-mid2); color: var(--green-dark); }
+    .tag-blue { background: #B5D4F4; color: var(--blue-dark); }
+
+    .option-title {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .option-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* Suggestion cards */
+    .sg { display: flex; flex-direction: column; gap: 10px; margin: 0.75rem 0; }
+
+    .s {
+      background: var(--bg-secondary);
+      border-radius: var(--radius-md);
+      padding: 0.9rem 1rem;
+    }
+
+    .s-title {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 3px;
+    }
+
+    .s-title a {
+      color: var(--text);
+      text-decoration: underline;
+      text-decoration-color: var(--border-hover);
+      text-underline-offset: 3px;
+      transition: color 0.15s;
+    }
+
+    .s-title a:hover { color: var(--green-mid); }
+
+    .s-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-radius: 20px;
+      padding: 2px 9px;
+      margin-bottom: 6px;
+    }
+
+    .tg { background: var(--green-light); color: var(--green-dark); }
+    .ta { background: var(--amber-light); color: var(--amber-dark); }
+    .tp { background: var(--pink-light); color: var(--pink-dark); }
+    .tb { background: var(--blue-light); color: var(--blue-dark); }
+    .tbeer { background: var(--amber-mid2); color: var(--amber-dark); }
+
+    /* Race stats */
+    .race-stats { display: flex; gap: 8px; margin: 0.75rem 0; flex-wrap: wrap; }
+
+    .rs {
+      flex: 1;
+      min-width: 80px;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-md);
+      padding: 0.7rem 1rem;
+      text-align: center;
+    }
+
+    .rs-val {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--green-mid);
+      display: block;
+    }
+
+    .rs-lbl {
+      font-size: 10px;
+      color: var(--text-secondary);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-top: 2px;
+      display: block;
+    }
+
+    /* Closing */
+    .closing {
+      text-align: center;
+      padding: 1.75rem 1rem 0.5rem;
+      margin-top: 0.5rem;
+      border-top: 0.5px solid var(--border);
+      font-size: 15px;
+      line-height: 1.9;
+      color: var(--text);
+    }
+
+    .closing-sig {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.25rem;
+      margin-top: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    a { color: var(--green-mid); }
+
+    /* Bonus section divider */
+    .bonus-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 2rem 0 1.25rem;
+    }
+
+    .bonus-divider::before,
+    .bonus-divider::after {
+      content: '';
+      flex: 1;
+      height: 0.5px;
+      background: var(--border);
+    }
+
+    .bonus-divider span {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
   </style>
 </head>
 <body>
-  <div id="root"></div>
-  <script type="text/babel">
-    const { useState } = React;
+<div class="wrap">
 
-    const P = {
-      bg: "#0A0A0F", surface: "#12121A", card: "#1A1A26", border: "#2A2A3E",
-      accent: "#FF4D6D", accentSoft: "#FF4D6D18",
-      gold: "#FFB800", goldSoft: "#FFB80018",
-      green: "#00C896", greenSoft: "#00C89618",
-      blue: "#4D8EFF", blueSoft: "#4D8EFF18",
-      purple: "#A855F7", purpleSoft: "#A855F718",
-      text: "#F0F0FF", muted: "#6060A0", mid: "#A0A0C8",
-    };
+  <div class="hero">
+    <div class="hero-eyebrow">narozeniny · 70 let</div>
+    <div class="hero-title">Za krávami a čokoládou</div>
 
-    const THEMES = [
-      { theme: "Self-Service",            spend: 50225, leads: 1604, tts: 0,  ctr: 1.22, cpl: 31,  cpt: null, verdict: "SCALE",    note: "Highest volume, efficient CPL" },
-      { theme: "Guest-Ran Experience",    spend: 28849, leads: 729,  tts: 16, ctr: 1.46, cpl: 40,  cpt: 1803, verdict: "SCALE",    note: "Only non-DE theme with TTS" },
-      { theme: "Originals / Testimonial", spend: 11397, leads: 639,  tts: 0,  ctr: 1.54, cpl: 18,  cpt: null, verdict: "SCALE",    note: "Best CPL of any theme — underinvested" },
-      { theme: "Audience Angle Images",   spend: 13617, leads: 387,  tts: 0,  ctr: 3.11, cpl: 35,  cpt: null, verdict: "TEST",     note: "Highest CTR (3.11%) — explore further" },
-      { theme: "Turnkey Solution",        spend: 13974, leads: 378,  tts: 0,  ctr: 1.60, cpl: 37,  cpt: null, verdict: "TEST",     note: "Good CTR, CPL just above target" },
-      { theme: "99 Problems",             spend: 5427,  leads: 161,  tts: 0,  ctr: 1.58, cpl: 34,  cpt: null, verdict: "TEST",     note: "Solid CTR, room to improve CPL" },
-      { theme: "Elevator Pitch",          spend: 9097,  leads: 256,  tts: 0,  ctr: 0.97, cpl: 36,  cpt: null, verdict: "OPTIMISE", note: "Low CTR — hook needs work" },
-      { theme: "German (DE)",             spend: 5235,  leads: 7,    tts: 41, ctr: 1.47, cpl: 748, cpt: 128,  verdict: "SPECIAL",  note: "TTS-first market — different conversion path" },
-      { theme: "Revenue Per Week",        spend: 4229,  leads: 95,   tts: 0,  ctr: 1.22, cpl: 45,  cpt: null, verdict: "TEST",     note: "Average all round" },
-      { theme: "Dutch (NL)",              spend: 3672,  leads: 75,   tts: 0,  ctr: 2.20, cpl: 49,  cpt: null, verdict: "TEST",     note: "Strong CTR, LP mismatch suspected" },
-      { theme: "YouTube vs Singa",        spend: 10525, leads: 128,  tts: 0,  ctr: 1.32, cpl: 82,  cpt: null, verdict: "KILL",     note: "€82 CPL on €10.5K spend — cut it" },
-      { theme: "Peak Hour",               spend: 604,   leads: 10,   tts: 0,  ctr: 1.19, cpl: 60,  cpt: null, verdict: "PAUSE",    note: "Small sample, CPL too high" },
-      { theme: "Spanish",                 spend: 1239,  leads: 2,    tts: 0,  ctr: 2.87, cpl: 619, cpt: null, verdict: "KILL",     note: "High CTR, zero conversion" },
-      { theme: "Nordic/EN Intl",          spend: 1929,  leads: 10,   tts: 2,  ctr: 1.07, cpl: 193, cpt: 964,  verdict: "PAUSE",    note: "Very early, unclear signal" },
-    ];
+    <svg class="mountain-svg" viewBox="0 0 360 110" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="180,12 245,95 115,95" fill="#C0DD97" opacity="0.7"/>
+      <polygon points="245,32 305,95 185,95" fill="#B4B2A9" opacity="0.5"/>
+      <polygon points="115,48 172,95 58,95" fill="#D3D1C7" opacity="0.5"/>
+      <line x1="0" y1="95" x2="360" y2="95" stroke="#C0DD97" stroke-width="1" opacity="0.5"/>
+      <circle cx="52" cy="32" r="13" fill="#E6F1FB" opacity="0.45"/>
+      <circle cx="68" cy="22" r="18" fill="#E6F1FB" opacity="0.45"/>
+      <circle cx="86" cy="30" r="12" fill="#E6F1FB" opacity="0.35"/>
+    </svg>
 
-    const EXPERIMENTS = [
-      { id: "EXP-001", status: "CONCLUDED", variable: "Video hook style", hypothesis: "Real guest story (social proof) outperforms brand-scripted pitch", control: "video 1 – elevator pitch", variant: "video – guest ran experience", result: "€36 vs €40 CPL; guest-ran also generates TTS", learning: "Guest voice is more authentic but Originals/Testimonial at €18 CPL is the real winner — potentially underscaled.", winner: "originals" },
-      { id: "EXP-002", status: "CONCLUDED", variable: "Primary value proposition", hypothesis: "Self-service ease message scales better than social proof", control: "video – guest ran experience", variant: "video 2 – self-service", result: "1,604 leads vs 729 — self-service wins on volume at €31 CPL", learning: "Self-service captures a wider, less convinced audience. Scale both but guest-ran is more efficient per lead.", winner: "variant" },
-      { id: "EXP-003", status: "CONCLUDED", variable: "Emotional tone of hook", hypothesis: "Humour (99 Problems) improves CTR for cold audiences", control: "video – guest ran experience", variant: "video – 99 problems", result: "CTR 1.58% vs 1.46%; CPL €34 vs €40 — 99-problems narrowly wins both", learning: "Humour boosts both hook AND conversion slightly. Test fresher variants before scaling.", winner: "variant" },
-      { id: "EXP-004", status: "CONCLUDED", variable: "Ad language (EN vs native)", hypothesis: "Dutch-language creative beats English for NL market on CTR", control: "Video EN (NL region)", variant: "Dutch Video", result: "CTR 2.20% vs ~1.0% for EN; CPL €49 vs lower for EN", learning: "Native language lifts CTR strongly but CPL still high — landing page needs localisation to close the gap.", winner: "split" },
-      { id: "EXP-005", status: "ACTIVE", variable: "Conversion event type (market segment)", hypothesis: "German market responds to TTS funnel, not lead-gen funnel", control: "German ads optimised for leads", variant: "German ads optimised for Talk-to-Sales", result: "41 TTS at €128 CPT vs 7 leads at €748 CPL from same spend", learning: "DE users skip the lead-magnet step entirely and go straight to requesting a conversation. Optimise all DE campaigns around TTS as the primary conversion event.", winner: "variant" },
-    ];
-
-    const THRESHOLDS = [
-      { metric: "CTR (link click)",          kill: "< 0.8%",  test: "0.8–1.5%",  scale: "> 1.5%",  note: "Audience Angle Images benchmark: 3.11%" },
-      { metric: "Cost per Lead (CPL)",        kill: "> €60",   test: "€30–60",    scale: "< €30",   note: "Originals/Testimonial at €18 — new north star" },
-      { metric: "Cost per TTS (CPT)",         kill: "> €300",  test: "€100–300",  scale: "< €100",  note: "DE benchmark: €128; only 10 ads generated TTS" },
-      { metric: "Landing Page View Rate",     kill: "< 40%",   test: "40–65%",    scale: "> 65%",   note: "LPV ÷ Link Clicks — Dutch gap signals LP mismatch" },
-      { metric: "Spend before kill decision", kill: "€150+",   test: "—",         scale: "—",       note: "Min spend needed to read any signal reliably" },
-      { metric: "Leads before scaling",       kill: "—",       test: "5–20",      scale: "20+",     note: "Statistical confidence threshold" },
-    ];
-
-    const NEXT_TESTS = [
-      { priority: "P1", week: "Week 1", title: "Scale Originals / Testimonial", hypothesis: "€18 CPL on 639 leads — this is the most underinvested theme. Increase budget 3× and test new testimonial variants.", variable: "Budget scale + new testimonial talent", control: "Originals - B2B Video (current)", variant: "2× new testimonial angles, same format", metric: "CPL stability as budget scales", kill: "CPL > €30 at €1K spend", scale: "CPL holds < €22 at 50+ leads" },
-      { priority: "P1", week: "Week 1", title: "Hook test on Self-Service: problem vs benefit open", hypothesis: "Opening with a pain point ('Your bar has dead hours') hooks better than leading with the solution.", variable: "First 3 seconds of video only", control: "video 2 – self-service (benefit-first)", variant: "New hook: pain-point opening, same body", metric: "CTR", kill: "CTR < 0.8% at 5K impressions", scale: "CTR > 1.8% — beats control" },
-      { priority: "P1", week: "Week 1", title: "Audience Angle Images → add video version", hypothesis: "Static images achieve 3.11% CTR — highest of all themes. A video with the same angle may convert leads better.", variable: "Format (static → video)", control: "Audience Angle Images (static)", variant: "Short video with same karaoke-for-all / replacement angle", metric: "CPL", kill: "CPL > €50 at €200 spend", scale: "CPL < €25 with CTR > 2%" },
-      { priority: "P2", week: "Week 2", title: "Dutch: native landing page test", hypothesis: "Dutch ads drive 2.20% CTR but €49 CPL. The drop-off happens post-click — English LP is failing NL visitors.", variable: "Landing page language (EN → NL)", control: "Dutch ads → EN landing page", variant: "Dutch ads → NL landing page", metric: "Landing page view rate + CPL", kill: "No CPL improvement after €300 spend", scale: "CPL < €30 — then invest in full NL funnel" },
-      { priority: "P2", week: "Week 2", title: "German DE: dedicated TTS campaign", hypothesis: "German audience shows €128 CPT with current mixed setup. A campaign built entirely around TTS CTA may cut that in half.", variable: "Campaign objective + CTA (leads → TTS)", control: "Current German mixed ads", variant: "German ads with TTS-specific CTA + landing page", metric: "Cost per TTS (CPT)", kill: "CPT > €200 after €500 spend", scale: "CPT < €80 — explore full DE expansion" },
-    ];
-
-    const verdictColor = v => ({ SCALE: P.green, TEST: P.gold, OPTIMISE: P.blue, KILL: P.accent, PAUSE: P.muted, SPECIAL: P.purple }[v] || P.mid);
-    const statusColor  = s => ({ CONCLUDED: P.green, ACTIVE: P.gold }[s] || P.muted);
-
-    const Tag = ({ text, color }) => (
-      <span style={{ background: color+"22", color, border: `1px solid ${color}44`, borderRadius: 4, padding: "2px 9px", fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", fontFamily: "monospace", whiteSpace: "nowrap" }}>{text}</span>
-    );
-
-    const KV = ({ label, value, sub, color = P.text }) => (
-      <div style={{ background: P.card, border: `1px solid ${P.border}`, borderRadius: 10, padding: "18px 22px", flex: 1, minWidth: 120 }}>
-        <div style={{ color: P.muted, fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 5 }}>{label}</div>
-        <div style={{ color, fontSize: 30, fontWeight: 900, fontFamily: "Georgia, serif", lineHeight: 1 }}>{value}</div>
-        {sub && <div style={{ color: P.muted, fontSize: 11, marginTop: 4 }}>{sub}</div>}
+    <div class="timeline-strip">
+      <div class="tl-track">
+        <div class="tl-step">
+          <div class="tl-dot tl-dot-travel"></div>
+          <div class="tl-date">7. 7.</div>
+          <div class="tl-label">odjezd<br>z Prahy</div>
+        </div>
+        <div class="tl-step">
+          <div class="tl-dot tl-dot-stop"></div>
+          <div class="tl-date">8. 7.</div>
+          <div class="tl-label">výlet cestou<br>& příjezd</div>
+        </div>
+        <div class="tl-step">
+          <div class="tl-dot"></div>
+          <div class="tl-date">9–10. 7.</div>
+          <div class="tl-label">výlety<br>& jídlo</div>
+        </div>
+        <div class="tl-step">
+          <div class="tl-dot tl-dot-race"></div>
+          <div class="tl-date">11. 7.</div>
+          <div class="tl-label">vybíhám</div>
+        </div>
+        <div class="tl-step">
+          <div class="tl-dot tl-dot-race"></div>
+          <div class="tl-date">12. 7.</div>
+          <div class="tl-label">dobíhám<br>(doufám)</div>
+        </div>
+        <div class="tl-step">
+          <div class="tl-dot tl-dot-travel"></div>
+          <div class="tl-date">13. 7.</div>
+          <div class="tl-label">návrat<br>domů</div>
+        </div>
       </div>
-    );
+    </div>
+  </div>
 
-    function App() {
-      const [tab, setTab] = useState("overview");
-      const [expanded, setExpanded] = useState(null);
+  <div class="sections">
 
-      const tabs = [
-        { id: "overview",     label: "Data Overview" },
-        { id: "framework",    label: "Framework" },
-        { id: "experiments",  label: "Experiment Log" },
-        { id: "thresholds",   label: "Thresholds" },
-        { id: "next",         label: "Next Tests" },
-      ];
+    <!-- Úvod -->
+    <div class="section-block">
+      <div class="section-header" onclick="toggle(this)">
+        <div class="section-meta">
+          <div class="section-icon ig">💌</div>
+          <div><div class="section-label">úterý 7. 7. — začínáme</div><div class="section-title">Úvod</div></div>
+        </div>
+        <div class="chevron">›</div>
+      </div>
+      <div class="section-body"><div class="section-inner">
+        <p>Čau tatí,</p>
+        <p>takový narozeniny, to si zaslouží pořádný dárek! A mně moc záleží na tom, abychom spolu trávili čas — takže jsem to spojila dohromady.</p>
+        <p>Zvu tě na malý letní výlet. Se mnou 🙂</p>
+        <p>Hory, výlety, nějaká čokoláda a fondue, krávy...už víš, kam to bude?</p>
+      </div></div>
+    </div>
 
-      return (
-        <div style={{ background: P.bg, minHeight: "100vh", color: P.text, fontFamily: "Georgia, serif", paddingBottom: 80 }}>
+    <!-- Cesta tam -->
+    <div class="section-block">
+      <div class="section-header" onclick="toggle(this)">
+        <div class="section-meta">
+          <div class="section-icon ia">🚗</div>
+          <div><div class="section-label">úterý 7. 7. — odjezd</div><div class="section-title">Cesta tam</div></div>
+        </div>
+        <div class="chevron">›</div>
+      </div>
+      <div class="section-body"><div class="section-inner">
+        <p>Vyrazíme v úterý 7. července odpoledne, přespíme někde cestou a ve středu uděláme zastávku na výlet. Ještě jsem nic nebookovala — domluvme se, která cesta bude nejlepší. Navrhuji jet přes Německo spodem a zastavit na noc někde u Bodensee.</p>
+      </div></div>
+    </div>
 
-          {/* ── HEADER ── */}
-          <div style={{ borderBottom: `1px solid ${P.border}`, padding: "28px 36px 0" }}>
-            <div style={{ display: "flex", gap: 12, alignItems: "baseline", marginBottom: 4 }}>
-              <span style={{ color: P.accent, fontFamily: "monospace", fontSize: 12, letterSpacing: "0.15em" }}>SINGA B2B</span>
-              <span style={{ color: P.border }}>|</span>
-              <span style={{ color: P.muted, fontFamily: "monospace", fontSize: 12 }}>Sep 2025 – Mar 2026</span>
-            </div>
-            <h1 style={{ fontSize: 32, fontWeight: 900, margin: "0 0 4px", letterSpacing: "-0.02em" }}>Ad Experimentation Framework</h1>
-            <p style={{ color: P.muted, fontSize: 14, margin: "0 0 22px" }}>What drove performance · How to test · When to kill or scale</p>
-            <div style={{ display: "flex", overflowX: "auto" }}>
-              {tabs.map(t => (
-                <button key={t.id} onClick={() => setTab(t.id)} style={{
-                  background: "none", border: "none", cursor: "pointer",
-                  color: tab === t.id ? P.accent : P.muted,
-                  borderBottom: `2px solid ${tab === t.id ? P.accent : "transparent"}`,
-                  padding: "10px 18px", fontSize: 14, fontFamily: "Georgia, serif",
-                  fontWeight: tab === t.id ? 700 : 400, transition: "all 0.15s", whiteSpace: "nowrap",
-                }}>{t.label}</button>
-              ))}
-            </div>
+    <!-- Zastávka -->
+    <div class="section-block">
+      <div class="section-header" onclick="toggle(this)">
+        <div class="section-meta">
+          <div class="section-icon ib">🏔️</div>
+          <div><div class="section-label">středa 8. 7. — zastávka & příjezd</div><div class="section-title">Výlet cestou a příjezd na místo</div></div>
+        </div>
+        <div class="chevron">›</div>
+      </div>
+      <div class="section-body"><div class="section-inner">
+        <p>Máme dvě možnosti. Vyber si:</p>
+        <div class="option-grid">
+          <div class="option option-a">
+            <div><span class="option-tag tag-green">Možnost A</span></div>
+            <div class="option-title"><a href="https://www.lauterbrunnen.swiss/en/" target="_blank">Lauterbrunnen</a></div>
+            <div class="option-desc">Údolí pod Eigerem, plné vodopádů. Lehká procházka údolím — pěšky, rovně, žádné výstupy — a pak kávu a dort někde v centru vesnice. Nenáročné, ale opravdu hezké.</div>
           </div>
-
-          <div style={{ padding: "28px 36px" }}>
-
-            {/* ── OVERVIEW ── */}
-            {tab === "overview" && (
-              <div>
-                <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 12 }}>
-                  <KV label="Total Spend"   value="€162.7K" sub="Sep 2025 – Mar 2026" />
-                  <KV label="Total Leads"   value="4,541"   sub="form submissions"    color={P.green} />
-                  <KV label="Talk-to-Sales" value="59"      sub="TTS form submissions" color={P.purple} />
-                  <KV label="Blended CPL"   value="€36"     sub="all lead types"      color={P.gold} />
-                  <KV label="Best CPL"      value="€18"     sub="Originals / Testimonial" color={P.green} />
-                </div>
-
-                <div style={{ background: P.purpleSoft, border: `1px solid ${P.purple}44`, borderRadius: 10, padding: "14px 20px", marginBottom: 24, display: "flex", gap: 16, alignItems: "flex-start" }}>
-                  <div style={{ color: P.purple, fontSize: 22, lineHeight: 1, flexShrink: 0 }}>⚡</div>
-                  <div style={{ fontSize: 14, lineHeight: 1.6 }}>
-                    <strong style={{ color: P.purple }}>Talk-to-Sales insight: </strong>
-                    <span style={{ color: P.mid }}>59 TTS submissions total — 41 of them (70%) from the </span>
-                    <strong style={{ color: P.text }}>German (DE) market</strong>
-                    <span style={{ color: P.mid }}> at €128 CPT. German ads skip standard lead forms entirely: DE users go straight to requesting a sales conversation. This isn't underperformance — it's a different conversion path that needs its own optimisation track.</span>
-                  </div>
-                </div>
-
-                <h2 style={{ fontSize: 18, color: P.mid, fontWeight: 400, marginBottom: 14 }}>
-                  Creative theme performance — <span style={{ color: P.text, fontWeight: 700 }}>Sep 2025 → Mar 2026</span>
-                </h2>
-
-                <div style={{ overflowX: "auto" }}>
-                  <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13, minWidth: 700 }}>
-                    <thead>
-                      <tr style={{ borderBottom: `2px solid ${P.border}` }}>
-                        {["Verdict","Theme","Leads","TTS","CTR","CPL","CPT","Spend","Note"].map(h => (
-                          <th key={h} style={{ padding: "8px 12px", textAlign: "left", color: P.muted, fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase", fontWeight: 600, whiteSpace: "nowrap" }}>{h}</th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {THEMES.map((t, i) => {
-                        const vc = verdictColor(t.verdict);
-                        return (
-                          <tr key={i} style={{ borderBottom: `1px solid ${P.border}`, background: i % 2 === 0 ? "transparent" : P.card+"66" }}>
-                            <td style={{ padding: "11px 12px" }}><Tag text={t.verdict} color={vc} /></td>
-                            <td style={{ padding: "11px 12px", fontWeight: 600, whiteSpace: "nowrap" }}>{t.theme}</td>
-                            <td style={{ padding: "11px 12px", color: t.leads > 200 ? P.green : P.text, fontWeight: t.leads > 200 ? 700 : 400 }}>{t.leads.toLocaleString()}</td>
-                            <td style={{ padding: "11px 12px", color: t.tts > 0 ? P.purple : P.muted, fontWeight: t.tts > 0 ? 700 : 400 }}>{t.tts > 0 ? t.tts : "—"}</td>
-                            <td style={{ padding: "11px 12px", color: t.ctr >= 2 ? P.green : t.ctr >= 1.5 ? P.gold : P.mid, fontFamily: "monospace" }}>{t.ctr}%</td>
-                            <td style={{ padding: "11px 12px", color: !t.cpl ? P.muted : t.cpl <= 25 ? P.green : t.cpl <= 45 ? P.gold : P.accent, fontFamily: "monospace", fontWeight: 700 }}>{t.cpl ? `€${t.cpl}` : "—"}</td>
-                            <td style={{ padding: "11px 12px", color: !t.cpt ? P.muted : t.cpt <= 150 ? P.green : t.cpt <= 300 ? P.gold : P.accent, fontFamily: "monospace" }}>{t.cpt ? `€${t.cpt}` : "—"}</td>
-                            <td style={{ padding: "11px 12px", color: P.muted, fontFamily: "monospace" }}>€{(t.spend/1000).toFixed(0)}K</td>
-                            <td style={{ padding: "11px 12px", color: P.muted, fontSize: 12 }}>{t.note}</td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-
-                <div style={{ marginTop: 20, background: P.accentSoft, border: `1px solid ${P.accent}44`, borderRadius: 10, padding: "16px 22px" }}>
-                  <strong style={{ color: P.accent }}>🔍 Three things the data is telling you</strong>
-                  <ol style={{ margin: "12px 0 0", color: P.mid, lineHeight: 1.9, fontSize: 14 }}>
-                    <li style={{ marginBottom: 8 }}><strong style={{ color: P.text }}>Originals/Testimonial at €18 CPL is massively underinvested</strong> — it generated 639 leads but received only €11.4K vs €50K on Self-Service.</li>
-                    <li style={{ marginBottom: 8 }}><strong style={{ color: P.text }}>Audience Angle Images have 3.11% CTR — the highest of any theme.</strong> That means the creative hook is doing its job: people are stopping and clicking. But at €35 CPL the post-click experience isn't matching that intent. The drop-off is likely happening on the landing page — the ad promises one thing (karaoke angles, venue fit) and the LP delivers something more generic. Worth auditing the LP journey specifically for this audience before assuming the creative needs changing.</li>
-                    <li><strong style={{ color: P.text }}>German DE runs on Talk-to-Sales, not content downloads</strong> — 41 TTS vs 7 leads from the same spend. This isn't a funnel mismatch; it's simply that DE users skip the lead-magnet step and go straight to requesting a conversation. The conversion mechanism is working, just a different one than other markets. Optimise DE campaigns around TTS as the primary conversion event rather than treating it as an underperformer on lead metrics.</li>
-                  </ol>
-                </div>
-              </div>
-            )}
-
-            {/* ── FRAMEWORK ── */}
-            {tab === "framework" && (
-              <div style={{ maxWidth: 800 }}>
-                <div style={{ color: P.accent, fontFamily: "monospace", fontSize: 11, letterSpacing: "0.15em", marginBottom: 6 }}>THE SYSTEM</div>
-                <h2 style={{ fontSize: 26, margin: "0 0 8px" }}>One Variable. One Test. One Learning.</h2>
-                <p style={{ color: P.mid, lineHeight: 1.7, marginBottom: 32, fontSize: 15 }}>
-                  The reason past tests haven't yielded clear learnings is that too many variables changed simultaneously. This framework enforces single-variable testing so every result is actionable.
-                </p>
-
-                {[
-                  { n: "01", t: "Write the hypothesis first", b: "\"We believe changing [X] will improve [metric] because [reason]. We'll know after €150 spend + 10 leads.\" If you can't write this, don't run the test." },
-                  { n: "02", t: "Change exactly ONE variable", b: "Hook, CTA copy, format, angle, language, or thumbnail — never two at once. Each test gets its own ad, same budget as control." },
-                  { n: "03", t: "Set kill/scale thresholds before launch", b: "Use the Thresholds tab. Write them in the experiment log before the ad goes live. Never move goalposts mid-test." },
-                  { n: "04", t: "Run for minimum 7 days, €150 spend", b: "Below this, results are noise. Check at €150 spend: if CPL > €60 → kill immediately. Otherwise run to €500 + 20 leads for conclusion." },
-                  { n: "05", t: "Document the learning, not just the result", b: "Even failed tests are wins. A test that proves something doesn't work saves budget for months. Log every test in the database — especially failures." },
-                  { n: "06", t: "One new test launched per week minimum", b: "The compounding effect of weekly learnings is what separates good ad teams from great ones. Block Tuesday morning for test launches." },
-                ].map(s => (
-                  <div key={s.n} style={{ display: "flex", gap: 20, alignItems: "flex-start", background: P.card, border: `1px solid ${P.border}`, borderRadius: 10, padding: "18px 22px", marginBottom: 12 }}>
-                    <div style={{ fontSize: 28, fontWeight: 900, color: P.border, fontFamily: "monospace", lineHeight: 1, minWidth: 44 }}>{s.n}</div>
-                    <div>
-                      <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 5 }}>{s.t}</div>
-                      <div style={{ color: P.mid, lineHeight: 1.6, fontSize: 14 }}>{s.b}</div>
-                    </div>
-                  </div>
-                ))}
-
-                <h3 style={{ fontSize: 16, color: P.mid, fontWeight: 400, margin: "28px 0 14px" }}>Variables to test, in priority order</h3>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 10 }}>
-                  {[
-                    { r: "1", v: "Hook (first 3 seconds)", w: "If they don't watch past 3s, nothing else matters.", e: "Guest voice / problem statement / stat / humour" },
-                    { r: "2", v: "Creative angle", w: "What emotional button does the ad push?", e: "FOMO / social proof / fear of loss / aspiration" },
-                    { r: "3", v: "CTA copy", w: "Wording affects intent signalling more than most think.", e: "\"Book a demo\" vs \"See how it works\" vs \"Get started\"" },
-                    { r: "4", v: "Format", w: "Video vs image vs carousel differs by audience temperature.", e: "30s video / static image / carousel guide" },
-                    { r: "5", v: "Language / market", w: "Native language lifts CTR — but must pair with local LP.", e: "EN vs NL vs DE — test LP in same language" },
-                    { r: "6", v: "Conversion event", w: "DE market shows TTS converts better than lead forms.", e: "Lead form vs TTS form vs demo booking" },
-                  ].map(item => (
-                    <div key={item.r} style={{ background: P.card, border: `1px solid ${P.border}`, borderRadius: 10, padding: "14px 16px" }}>
-                      <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 7 }}>
-                        <div style={{ background: P.accent, color: "#fff", borderRadius: 4, width: 22, height: 22, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, fontFamily: "monospace", flexShrink: 0 }}>{item.r}</div>
-                        <div style={{ fontWeight: 700, fontSize: 14 }}>{item.v}</div>
-                      </div>
-                      <div style={{ color: P.mid, fontSize: 13, lineHeight: 1.5, marginBottom: 5 }}>{item.w}</div>
-                      <div style={{ color: P.muted, fontSize: 12, fontStyle: "italic" }}>{item.e}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* ── EXPERIMENTS ── */}
-            {tab === "experiments" && (
-              <div>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 22, flexWrap: "wrap", gap: 12 }}>
-                  <div>
-                    <div style={{ color: P.accent, fontFamily: "monospace", fontSize: 11, letterSpacing: "0.15em", marginBottom: 4 }}>EXPERIMENT DATABASE</div>
-                    <h2 style={{ fontSize: 22, margin: 0 }}>What we tested · What we learned</h2>
-                  </div>
-                  <div style={{ display: "flex", gap: 10 }}>
-                    <Tag text={`${EXPERIMENTS.filter(e => e.status === "CONCLUDED").length} concluded`} color={P.green} />
-                    <Tag text={`${EXPERIMENTS.filter(e => e.status === "ACTIVE").length} active`} color={P.gold} />
-                  </div>
-                </div>
-
-                {EXPERIMENTS.map(exp => (
-                  <div key={exp.id} onClick={() => setExpanded(expanded === exp.id ? null : exp.id)}
-                    style={{ background: P.card, border: `1px solid ${expanded === exp.id ? P.accent+"88" : P.border}`, borderRadius: 10, padding: "16px 20px", marginBottom: 10, cursor: "pointer", transition: "border-color 0.15s" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
-                      <span style={{ fontFamily: "monospace", fontSize: 11, color: P.muted }}>{exp.id}</span>
-                      <Tag text={exp.status} color={statusColor(exp.status)} />
-                      <div style={{ flex: 1, fontWeight: 700, fontSize: 15, minWidth: 200 }}>{exp.hypothesis}</div>
-                      <span style={{ color: P.blue, fontSize: 12 }}>var: {exp.variable}</span>
-                    </div>
-                    {expanded === exp.id && (
-                      <div style={{ marginTop: 16, borderTop: `1px solid ${P.border}`, paddingTop: 16, display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 14 }}>
-                        <div><div style={{ color: P.muted, fontSize: 10, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 4 }}>Control</div><div style={{ fontSize: 13, color: P.mid }}>{exp.control}</div></div>
-                        <div><div style={{ color: P.muted, fontSize: 10, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 4 }}>Variant</div><div style={{ fontSize: 13, color: P.mid }}>{exp.variant}</div></div>
-                        <div style={{ gridColumn: "1 / -1" }}><div style={{ color: P.muted, fontSize: 10, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 4 }}>Result</div><div style={{ fontSize: 13, color: P.text }}>{exp.result}</div></div>
-                        <div style={{ gridColumn: "1 / -1", background: P.greenSoft, border: `1px solid ${P.green}44`, borderRadius: 8, padding: "12px 14px" }}>
-                          <div style={{ color: P.green, fontSize: 10, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 4 }}>💡 Learning</div>
-                          <div style={{ color: P.text, lineHeight: 1.6, fontSize: 14 }}>{exp.learning}</div>
-                        </div>
-                        {exp.winner && <div><div style={{ color: P.muted, fontSize: 10, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 4 }}>Winner</div><Tag text={exp.winner === "split" ? "context-dependent" : exp.winner} color={exp.winner === "split" ? P.gold : P.green} /></div>}
-                      </div>
-                    )}
-                  </div>
-                ))}
-                <div style={{ color: P.muted, fontSize: 12, fontStyle: "italic", marginTop: 8 }}>Click any row to expand. Notion columns: ID · Hypothesis · Variable · Control · Variant · Result · Learning · Winner · Status · Owner</div>
-              </div>
-            )}
-
-            {/* ── THRESHOLDS ── */}
-            {tab === "thresholds" && (
-              <div>
-                <div style={{ color: P.accent, fontFamily: "monospace", fontSize: 11, letterSpacing: "0.15em", marginBottom: 6 }}>DECISION RULES</div>
-                <h2 style={{ fontSize: 22, margin: "0 0 8px" }}>Kill · Test · Scale Thresholds</h2>
-                <p style={{ color: P.mid, marginBottom: 24, lineHeight: 1.6, fontSize: 14 }}>Set thresholds <em>before</em> launching each test. Never move them mid-flight. Review quarterly as data volume grows.</p>
-
-                <div style={{ overflowX: "auto" }}>
-                  <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13, minWidth: 600 }}>
-                    <thead>
-                      <tr style={{ borderBottom: `2px solid ${P.border}` }}>
-                        {["Metric","🔴 Kill","🟡 Keep Testing","🟢 Scale","Notes"].map(h => (
-                          <th key={h} style={{ padding: "8px 14px", textAlign: "left", color: P.muted, fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase" }}>{h}</th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {THRESHOLDS.map((t, i) => (
-                        <tr key={i} style={{ borderBottom: `1px solid ${P.border}`, background: i % 2 === 0 ? "transparent" : P.card+"88" }}>
-                          <td style={{ padding: "13px 14px", fontWeight: 600 }}>{t.metric}</td>
-                          <td style={{ padding: "13px 14px", color: P.accent, fontFamily: "monospace" }}>{t.kill}</td>
-                          <td style={{ padding: "13px 14px", color: P.gold,   fontFamily: "monospace" }}>{t.test}</td>
-                          <td style={{ padding: "13px 14px", color: P.green,  fontFamily: "monospace" }}>{t.scale}</td>
-                          <td style={{ padding: "13px 14px", color: P.muted,  fontSize: 12 }}>{t.note}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 14, marginTop: 24 }}>
-                  <div style={{ background: P.accentSoft, border: `1px solid ${P.accent}44`, borderRadius: 10, padding: "16px 20px" }}>
-                    <div style={{ color: P.accent, fontWeight: 700, marginBottom: 8 }}>Kill immediately if</div>
-                    <ul style={{ color: P.mid, lineHeight: 2, fontSize: 13 }}>
-                      <li>CPL &gt; €60 after €150 spend</li>
-                      <li>Zero leads after €200 spend</li>
-                      <li>CTR below 0.5% at 5K+ impressions</li>
-                      <li>All 3 quality rankings "Below average"</li>
-                    </ul>
-                  </div>
-                  <div style={{ background: P.greenSoft, border: `1px solid ${P.green}44`, borderRadius: 10, padding: "16px 20px" }}>
-                    <div style={{ color: P.green, fontWeight: 700, marginBottom: 8 }}>Scale confidently if</div>
-                    <ul style={{ color: P.mid, lineHeight: 2, fontSize: 13 }}>
-                      <li>CPL &lt; €30 after 20+ leads</li>
-                      <li>CTR &gt; 1.5% sustained 7+ days</li>
-                      <li>CPL stable as budget increases</li>
-                      <li>At least Average quality ranking</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* ── NEXT TESTS ── */}
-            {tab === "next" && (
-              <div>
-                <div style={{ color: P.accent, fontFamily: "monospace", fontSize: 11, letterSpacing: "0.15em", marginBottom: 6 }}>READY TO EXECUTE</div>
-                <h2 style={{ fontSize: 22, margin: "0 0 8px" }}>Proposed Experiments — Next 4 Weeks</h2>
-                <p style={{ color: P.mid, marginBottom: 24, lineHeight: 1.6, fontSize: 14 }}>Each changes exactly one variable against current best performers. Kill/scale thresholds pre-set.</p>
-
-                {NEXT_TESTS.map((exp, i) => (
-                  <div key={i} style={{ background: P.card, border: `1px solid ${P.border}`, borderRadius: 10, padding: "20px 24px", marginBottom: 12 }}>
-                    <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 14, flexWrap: "wrap" }}>
-                      <Tag text={exp.priority} color={exp.priority === "P1" ? P.accent : exp.priority === "P2" ? P.gold : P.blue} />
-                      <Tag text={exp.week} color={P.muted} />
-                      <h3 style={{ margin: 0, fontSize: 16 }}>{exp.title}</h3>
-                    </div>
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 12 }}>
-                      <div style={{ gridColumn: "1 / -1" }}>
-                        <div style={{ color: P.muted, fontSize: 10, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 4 }}>Hypothesis</div>
-                        <div style={{ fontSize: 14, color: P.mid, lineHeight: 1.5 }}>{exp.hypothesis}</div>
-                      </div>
-                      <div>
-                        <div style={{ color: P.muted, fontSize: 10, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 4 }}>Variable changing</div>
-                        <div style={{ fontSize: 13, color: P.blue }}>{exp.variable}</div>
-                      </div>
-                      <div>
-                        <div style={{ color: P.muted, fontSize: 10, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 4 }}>Primary metric</div>
-                        <div style={{ fontSize: 13, color: P.text }}>{exp.metric}</div>
-                      </div>
-                      <div>
-                        <div style={{ color: P.muted, fontSize: 10, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 4 }}>Control</div>
-                        <div style={{ fontSize: 12, color: P.mid, fontFamily: "monospace" }}>{exp.control}</div>
-                      </div>
-                      <div>
-                        <div style={{ color: P.muted, fontSize: 10, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 4 }}>Variant</div>
-                        <div style={{ fontSize: 12, color: P.mid, fontFamily: "monospace" }}>{exp.variant}</div>
-                      </div>
-                      <div style={{ background: P.accentSoft, borderRadius: 6, padding: "10px 14px" }}>
-                        <div style={{ color: P.accent, fontSize: 10, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 2 }}>Kill if</div>
-                        <div style={{ fontSize: 13, color: P.text }}>{exp.kill}</div>
-                      </div>
-                      <div style={{ background: P.greenSoft, borderRadius: 6, padding: "10px 14px" }}>
-                        <div style={{ color: P.green, fontSize: 10, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 2 }}>Scale if</div>
-                        <div style={{ fontSize: 13, color: P.text }}>{exp.scale}</div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-
-                <div style={{ marginTop: 20, background: P.goldSoft, border: `1px solid ${P.gold}44`, borderRadius: 10, padding: "18px 22px" }}>
-                  <div style={{ fontWeight: 700, color: P.gold, marginBottom: 12 }}>Immediate actions before next week</div>
-                  {[
-                    { urgent: true,  action: "Kill YouTube vs Singa — €10.5K spent, €82 CPL, no recovery path. Reallocate budget to Originals." },
-                    { urgent: true,  action: "Kill Spanish — 2.87% CTR but €619 CPL. High click curiosity, zero commercial intent." },
-                    { urgent: false, action: "Move budget from Elevator Pitch (€36 CPL, 0.97% CTR) to Originals/Testimonial (€18 CPL, 1.54% CTR)." },
-                    { urgent: false, action: "Build Notion experiment database: ID · Hypothesis · Variable · Control · Variant · Metric · Kill Threshold · Scale Threshold · Result · Learning · Status · Owner." },
-                    { urgent: false, action: "Set up a DE-specific campaign with TTS as the conversion event, not lead form. Separate from EN campaigns." },
-                    { urgent: false, action: "Book weekly 30-min experiment review — results read Monday, new tests launched Tuesday." },
-                  ].map((item, i) => (
-                    <div key={i} style={{ display: "flex", gap: 12, alignItems: "flex-start", marginBottom: 10 }}>
-                      <div style={{ background: item.urgent ? P.accent : P.gold, color: P.bg, borderRadius: 3, width: 20, height: 20, minWidth: 20, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 700, marginTop: 1 }}>{i+1}</div>
-                      <div style={{ color: P.mid, fontSize: 14, lineHeight: 1.5 }}>{item.urgent && <strong style={{ color: P.accent }}>URGENT: </strong>}{item.action}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
+          <div class="option option-b">
+            <div><span class="option-tag tag-blue">Možnost B</span></div>
+            <div class="option-title"><a href="https://www.interlaken.ch/en" target="_blank">Interlaken</a></div>
+            <div class="option-desc">To už je 20 let, co jsme tam byli, ne? Dáme procházku k jezeru a kávu a dort. Klasika, ale fajn klasika.</div>
           </div>
         </div>
-      );
-    }
+        <p>Odpoledne vyrazíme dál a večer dorazíme do cíle — do Verbier. Čeká na nás <a href="https://www.bristol-verbier.ch/" target="_blank">hotel se snídaní</a>!</p>
+      </div></div>
+    </div>
 
-    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
-  </script>
+    <!-- Výlety -->
+    <div class="section-block">
+      <div class="section-header" onclick="toggle(this)">
+        <div class="section-meta">
+          <div class="section-icon ig">🥾</div>
+          <div><div class="section-label">čtvrtek 9. 7. a pátek 10. 7. — výlety</div><div class="section-title">Kam na túru</div></div>
+        </div>
+        <div class="chevron">›</div>
+      </div>
+      <div class="section-body"><div class="section-inner">
+        <p>Verbier je v létě výletní ráj. Lanovky fungují, turistické trasy jsou otevřené, krav je dostatek. Žádné dlouhé túry, ale možností je spoustu, například:</p>
+        <div class="sg">
+          <div class="s">
+            <div><span class="tag tg">Společně</span></div>
+            <div class="s-title"><a href="https://www.verbier.ch/en/summer/hiking/pierre-avoi" target="_blank">Pierre Avoi — výhled na 360°</a></div>
+            <div class="s-desc">Polodenský výstup z Croix-de-Coeur (lanovkou nahoru, pěšky na vrchol). Výhled na Mont Blanc i Matterhorn. Já si to taky ráda projdu před závodem, pomaleji a v klidu.</div>
+          </div>
+          <div class="s">
+            <div><span class="tag tg">Společně</span></div>
+            <div class="s-title"><a href="https://www.verbier.ch/en/summer/hiking/lac-des-vaux" target="_blank">Lac des Vaux — alpské jezero</a></div>
+            <div class="s-desc">Krátká túra od Les Ruinettes (lanovkou nahoru), modré jezero obklopené horami. Ideální na piknik, žádné drama.</div>
+          </div>
+          <div class="s">
+            <div><span class="tag tg">Společně</span></div>
+            <div class="s-title"><a href="https://www.verbier.ch/en/summer/hiking/bisse-du-levron" target="_blank">Bisse du Levron — procházka s výhledem</a></div>
+            <div class="s-desc">Historický zavlažovací kanál nad Verbier — rovná, pohodlná cesta loukami s výhledem na celé údolí. Žádné stoupání, žádný stres. Ideální na kafe z termosky a focení krav.</div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- Závod -->
+    <div class="section-block">
+      <div class="section-header" onclick="toggle(this)">
+        <div class="section-meta">
+          <div class="section-icon is">🏃</div>
+          <div><div class="section-label">sobota 11. 7. — závod</div><div class="section-title">Jo, a já tam taky poběžím závod</div></div>
+        </div>
+        <div class="chevron">›</div>
+      </div>
+      <div class="section-body"><div class="section-inner">
+        <p>V sobotu ráno 11. července vybíhám na <a href="https://utmb.world/races/stbernard" target="_blank">UTMB St. Bernard–Verbier</a>.</p>
+        <div class="race-stats">
+          <div class="rs"><span class="rs-val">77</span><span class="rs-lbl">km</span></div>
+          <div class="rs"><span class="rs-val">~5 000</span><span class="rs-lbl">metrů výšky</span></div>
+          <div class="rs"><span class="rs-val">~24h</span><span class="rs-lbl">na trati</span></div>
+        </div>
+        <p>Poběžím do neděle 12. července do rána. Pokud neodstoupím někde ve třetí ranní na nějakém hřebeni — ale to se nestane.</p>
+        <div class="hl-amber">Tady přicházíš na scénu ty. Na několika aid stations se může mít závodník podporu zvenku — přineseš mi jídlo, pití, suché ponožky a opalovací krém. A na spoustu z nich dojedeš na kole. Jen aby se ti do batohu vešly moje náhradní ponožky.</div>
+        <p>Mezitím máš celou sobotu v Alpách, lanovky, kolo, hory. Mohlo by být hůř.</p>
+      </div></div>
+    </div>
+
+    <!-- Závěr -->
+    <div class="section-block">
+      <div class="section-header" onclick="toggle(this)">
+        <div class="section-meta">
+          <div class="section-icon ig">💚</div>
+          <div><div class="section-label">pondělí 13. 7. — návrat</div><div class="section-title">A na závěr</div></div>
+        </div>
+        <div class="chevron">›</div>
+      </div>
+      <div class="section-body"><div class="section-inner">
+        <p>V pondělí jedeme zpět. Já unavená, ty snad spokojený.</p>
+        <p>Doufám, že budeš s výletem spokojený. A já, že doběhnu.</p>
+        <div class="closing">
+          Mám tě ráda. Všechno nejlepší.<br>
+          <div class="closing-sig">B.</div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- Bonus divider -->
+    <div class="bonus-divider"><span>Verbier — tipy</span></div>
+
+    <!-- Kam na jídlo -->
+    <div class="section-block">
+      <div class="section-header" onclick="toggle(this)">
+        <div class="section-meta">
+          <div class="section-icon ia">🍷</div>
+          <div><div class="section-label">Verbier — tipy</div><div class="section-title">Kam na jídlo</div></div>
+        </div>
+        <div class="chevron">›</div>
+      </div>
+      <div class="section-body"><div class="section-inner">
+        <div class="sg">
+          <div class="s">
+            <div><span class="tag ta">Doporučuju</span></div>
+            <div class="s-title"><a href="https://www.lecarrefour-verbier.ch/" target="_blank">Le Carrefour</a></div>
+            <div class="s-desc">Jedna z nejstarších restaurací v oblasti. Kamenné interiéry, terasa s výhledem na Alpy, místní víno. Rösti, grilované maso, fondue — švýcarská klasika bez turistické přirážky.</div>
+          </div>
+          <div class="s">
+            <div><span class="tag ta">Doporučuju</span></div>
+            <div class="s-title"><a href="https://www.seeverbier.com/restaurants/les-chamois" target="_blank">Restaurant les Chamois</a></div>
+            <div class="s-desc">Rustikální horská restaurace na Rue de Médran. Otevřený oheň, tradiční valaiská kuchyně, slunná terasa. Přesně to, co si člověk od švýcarské večeře představuje.</div>
+          </div>
+          <div class="s">
+            <div><span class="tag ta">Na pizzu</span></div>
+            <div class="s-title"><a href="https://www.alcapone-verbier.com/en/" target="_blank">Al Capone</a></div>
+            <div class="s-desc">Nejpopulárnější pizzerie ve Verbier — přes 25 druhů pizzy, příjemný personál, slunná terasa s výhledem na Combins massif. Na večer bez komplikací.</div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- Kam na kafe -->
+    <div class="section-block">
+      <div class="section-header" onclick="toggle(this)">
+        <div class="section-meta">
+          <div class="section-icon ip">☕</div>
+          <div><div class="section-label">Verbier — tipy</div><div class="section-title">Kam na kafe</div></div>
+        </div>
+        <div class="chevron">›</div>
+      </div>
+      <div class="section-body"><div class="section-inner">
+        <div class="sg">
+          <div class="s">
+            <div><span class="tag tp">Nejlepší pekárna</span></div>
+            <div class="s-title"><a href="https://www.tripadvisor.com/Restaurant_Review-g198848-d23792243-Reviews-Clovis_Co-Verbier_Canton_of_Valais_Swiss_Alps.html" target="_blank">Clovis & Co</a></div>
+            <div class="s-desc">Nejlepší croissanty ve Verbier — rovnou z trouby. Skvělá káva, příjemný personál, hned u lanovky. Povinná zastávka ráno před výletem.</div>
+          </div>
+          <div class="s">
+            <div><span class="tag tp">Klasika</span></div>
+            <div class="s-title"><a href="https://www.seeverbier.com/cafes/milk-bar" target="_blank">Milk Bar</a></div>
+            <div class="s-desc">Klidné místo s palačinkami, dorty, zmrzlinou a tarty. Dobrá horká čokoláda, příjemná atmosféra. Na odpolední pauzu po výletu.</div>
+          </div>
+          <div class="s">
+            <div><span class="tag tb">Švýcarský must</span></div>
+            <div class="s-title"><a href="https://www.offshorecafe.com/" target="_blank">Offshore Café</a></div>
+            <div class="s-desc">Legendární místo od roku 1986, skvělá káva a snídaně. Surfová atmosféra uprostřed Alp — trochu absurdní, ale prostě funguje. Hned u lanovky Medran.</div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- Kam na pivo -->
+    <div class="section-block">
+      <div class="section-header" onclick="toggle(this)">
+        <div class="section-meta">
+          <div class="section-icon ibeer">🍺</div>
+          <div><div class="section-label">Verbier — tipy</div><div class="section-title">Kam na pivo</div></div>
+        </div>
+        <div class="chevron">›</div>
+      </div>
+      <div class="section-body"><div class="section-inner">
+        <div class="sg">
+          <div class="s">
+            <div><span class="tag tbeer">Doporučuju</span></div>
+            <div class="s-title"><a href="https://www.pubmontfort.com/" target="_blank">Pub Mont Fort</a></div>
+            <div class="s-desc">Od roku 1977. Točené pivo, živá hudba, terasa s výhledem. Oblíbené u místních i turistů — přesně ten typ pubu, kam se jde na jedno a zůstane se na tři.</div>
+          </div>
+          <div class="s">
+            <div><span class="tag tbeer">Taky dobrý</span></div>
+            <div class="s-title"><a href="https://www.feracheval-verbier.ch/" target="_blank">Fer à Cheval</a></div>
+            <div class="s-desc">Oblíbené u místních, výborné pizzy k pivu, živá atmosféra. Spíš restaurace než pub, ale večer se to hezky rozjede.</div>
+          </div>
+          <div class="s">
+            <div><span class="tag tbeer">Na klidnější večer</span></div>
+            <div class="s-title"><a href="https://www.seeverbier.com/bars/alp-and-horn" target="_blank">Alp & Horn</a></div>
+            <div class="s-desc">Relaxovaná atmosféra, dobré pivo, weekly pub quiz. Pokud chceš večer strávit v klidu bez davů — tohle je správná volba.</div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function toggle(header) {
+    const body = header.nextElementSibling;
+    const chevron = header.querySelector('.chevron');
+    const isOpen = body.classList.contains('open');
+    body.classList.toggle('open', !isOpen);
+    chevron.style.transform = isOpen ? '' : 'rotate(90deg)';
+  }
+</script>
 </body>
 </html>
