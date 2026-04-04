@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Za krávami a čokoládou</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Source+Sans+3:wght@300;400&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -64,7 +65,7 @@
     html { font-size: 16px; }
 
     body {
-      font-family: 'Lato', sans-serif;
+      font-family: 'Source Sans 3', sans-serif;
       font-weight: 300;
       background: var(--bg);
       color: var(--text);
@@ -96,7 +97,7 @@
     }
 
     .hero-title {
-      font-family: 'Playfair Display', serif;
+      font-family: 'Cormorant Garamond', serif;
       font-size: clamp(1.9rem, 5vw, 2.6rem);
       font-weight: 400;
       line-height: 1.15;
@@ -158,7 +159,7 @@
 
     .tl-date {
       font-size: 10px;
-      font-family: 'Playfair Display', serif;
+      font-family: 'Cormorant Garamond', serif;
       color: var(--text);
       text-align: center;
       line-height: 1.3;
@@ -224,7 +225,7 @@
     }
 
     .section-title {
-      font-family: 'Playfair Display', serif;
+      font-family: 'Cormorant Garamond', serif;
       font-size: 1.05rem;
       font-weight: 400;
       color: var(--text);
@@ -309,6 +310,60 @@
       line-height: 1.6;
     }
 
+    /* Hike cards */
+    .hike-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 1rem 0;
+    }
+
+    .hike-card {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: var(--bg-secondary);
+      text-decoration: none;
+      display: block;
+      transition: transform 0.15s, box-shadow 0.15s;
+      border: 0.5px solid var(--border);
+    }
+
+    .hike-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+
+    .hike-img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      background-color: var(--green-light);
+    }
+
+    .hike-body {
+      padding: 0.75rem;
+    }
+
+    .hike-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .hike-desc {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    @media (max-width: 480px) {
+      .hike-grid { grid-template-columns: 1fr; }
+    }
+
     /* Suggestion cards */
     .sg { display: flex; flex-direction: column; gap: 10px; margin: 0.75rem 0; }
 
@@ -370,7 +425,7 @@
     }
 
     .rs-val {
-      font-family: 'Playfair Display', serif;
+      font-family: 'Cormorant Garamond', serif;
       font-size: 1.4rem;
       color: var(--green-mid);
       display: block;
@@ -397,7 +452,7 @@
     }
 
     .closing-sig {
-      font-family: 'Playfair Display', serif;
+      font-family: 'Cormorant Garamond', serif;
       font-style: italic;
       font-size: 1.25rem;
       margin-top: 0.75rem;
@@ -429,13 +484,67 @@
       color: var(--text-secondary);
       white-space: nowrap;
     }
+    /* Closing letter */
+    .closing-letter {
+      background: var(--bg-card);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem 1.75rem 1.5rem;
+      margin: 1.5rem 0;
+      text-align: center;
+    }
+
+    .closing-letter p {
+      font-size: 15px;
+      line-height: 1.85;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .closing-letter p:last-of-type { margin-bottom: 0; }
+
+    /* Route map */
+    .route-map {
+      background: var(--bg-secondary);
+      border-radius: var(--radius-md);
+      padding: 1rem 0.5rem 0.25rem;
+      margin: 1rem 0;
+      border: 0.5px solid var(--border);
+    }
+
+    /* Intro letter */
+    .intro-letter {
+      background: var(--bg-card);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem 1.75rem 1.5rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+
+
+    .intro-letter p {
+      font-size: 15px;
+      line-height: 1.85;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+    }
+
+    .intro-letter p:last-child { margin-bottom: 0; }
+
+    .intro-tease {
+      color: var(--text-secondary) !important;
+      font-style: italic;
+    }
+
   </style>
 </head>
 <body>
 <div class="wrap">
 
   <div class="hero">
-    <div class="hero-eyebrow">narozeniny · 70 let</div>
+    <div class="hero-eyebrow">Táta · narozeniny</div>
     <div class="hero-title">Za krávami a čokoládou</div>
 
     <svg class="mountain-svg" viewBox="0 0 360 110" xmlns="http://www.w3.org/2000/svg">
@@ -484,24 +593,14 @@
     </div>
   </div>
 
-  <div class="sections">
+  <div class="intro-letter">
+    <p>Čau tatí,</p>
+    <p>takový narozeniny, to si zaslouží pořádný dárek! A mně moc záleží na tom, abychom spolu trávili čas — takže jsem to spojila dohromady.</p>
+    <p>Zvu tě na malý letní výlet. Se mnou 😄</p>
+    <p class="intro-tease">Hory, výlety, nějaká čokoláda a fondue, krávy...už víš, kam to bude?</p>
+  </div>
 
-    <!-- Úvod -->
-    <div class="section-block">
-      <div class="section-header" onclick="toggle(this)">
-        <div class="section-meta">
-          <div class="section-icon ig">💌</div>
-          <div><div class="section-label">úterý 7. 7. — začínáme</div><div class="section-title">Úvod</div></div>
-        </div>
-        <div class="chevron">›</div>
-      </div>
-      <div class="section-body"><div class="section-inner">
-        <p>Čau tatí,</p>
-        <p>takový narozeniny, to si zaslouží pořádný dárek! A mně moc záleží na tom, abychom spolu trávili čas — takže jsem to spojila dohromady.</p>
-        <p>Zvu tě na malý letní výlet. Se mnou 🙂</p>
-        <p>Hory, výlety, nějaká čokoláda a fondue, krávy...už víš, kam to bude?</p>
-      </div></div>
-    </div>
+  <div class="sections">
 
     <!-- Cesta tam -->
     <div class="section-block">
@@ -549,28 +648,53 @@
       <div class="section-header" onclick="toggle(this)">
         <div class="section-meta">
           <div class="section-icon ig">🥾</div>
-          <div><div class="section-label">čtvrtek 9. 7. a pátek 10. 7. — výlety</div><div class="section-title">Kam na túru</div></div>
+          <div><div class="section-label">čtvrtek 9. 7. a pátek 10. 7. — výlety</div><div class="section-title">Kam na výlet</div></div>
         </div>
         <div class="chevron">›</div>
       </div>
       <div class="section-body"><div class="section-inner">
         <p>Verbier je v létě výletní ráj. Lanovky fungují, turistické trasy jsou otevřené, krav je dostatek. Žádné dlouhé túry, ale možností je spoustu, například:</p>
-        <div class="sg">
-          <div class="s">
-            <div><span class="tag tg">Společně</span></div>
-            <div class="s-title"><a href="https://www.verbier.ch/en/summer/hiking/pierre-avoi" target="_blank">Pierre Avoi — výhled na 360°</a></div>
-            <div class="s-desc">Polodenský výstup z Croix-de-Coeur (lanovkou nahoru, pěšky na vrchol). Výhled na Mont Blanc i Matterhorn. Já si to taky ráda projdu před závodem, pomaleji a v klidu.</div>
-          </div>
-          <div class="s">
-            <div><span class="tag tg">Společně</span></div>
-            <div class="s-title"><a href="https://www.verbier.ch/en/summer/hiking/lac-des-vaux" target="_blank">Lac des Vaux — alpské jezero</a></div>
-            <div class="s-desc">Krátká túra od Les Ruinettes (lanovkou nahoru), modré jezero obklopené horami. Ideální na piknik, žádné drama.</div>
-          </div>
-          <div class="s">
-            <div><span class="tag tg">Společně</span></div>
-            <div class="s-title"><a href="https://www.verbier.ch/en/summer/hiking/bisse-du-levron" target="_blank">Bisse du Levron — procházka s výhledem</a></div>
-            <div class="s-desc">Historický zavlažovací kanál nad Verbier — rovná, pohodlná cesta loukami s výhledem na celé údolí. Žádné stoupání, žádný stres. Ideální na kafe z termosky a focení krav.</div>
-          </div>
+        <div class="hike-grid">
+          <a href="https://www.verbier.ch/en/sports-and-activities/summer-sports/hiking/pierre-avoi.html" target="_blank" class="hike-card">
+            <img class="hike-img" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80" alt="Pierre Avoi" />
+            <div class="hike-body">
+              <div><span class="tag tg">Výstup</span></div>
+              <div class="hike-title">Pierre Avoi</div>
+              <div class="hike-desc">360° výhled na Mont Blanc i Matterhorn. Lanovkou nahoru, pěšky na vrchol. Polodenní výlet.</div>
+            </div>
+          </a>
+          <a href="https://www.verbier.ch/en/sports-and-activities/summer-sports/hiking/lac-des-vaux.html" target="_blank" class="hike-card">
+            <img class="hike-img" src="https://images.unsplash.com/photo-1470770903676-69b98201ea1c?w=600&q=80" alt="Lac des Vaux" />
+            <div class="hike-body">
+              <div><span class="tag tg">Jezero</span></div>
+              <div class="hike-title">Lac des Vaux</div>
+              <div class="hike-desc">Modré alpské jezero obklopené horami. Lanovkou na Les Ruinettes, pak krátká túra. Ideální na piknik.</div>
+            </div>
+          </a>
+          <a href="https://www.verbier.ch/en/sports-and-activities/summer-sports/hiking/bisse-du-levron.html" target="_blank" class="hike-card">
+            <img class="hike-img" src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&q=80" alt="Bisse du Levron" />
+            <div class="hike-body">
+              <div><span class="tag tg">Procházka</span></div>
+              <div class="hike-title">Bisse du Levron</div>
+              <div class="hike-desc">Historický zavlažovací kanál — rovná, pohodlná cesta loukami s výhledem na celé údolí. Žádné stoupání.</div>
+            </div>
+          </a>
+          <a href="https://www.verbier.ch/en/sports-and-activities/summer-sports/hiking/lac-de-louvie.html" target="_blank" class="hike-card">
+            <img class="hike-img" src="https://images.unsplash.com/photo-1439853949212-36589f9f8458?w=600&q=80" alt="Lac de Louvie" />
+            <div class="hike-body">
+              <div><span class="tag tg">Jezero</span></div>
+              <div class="hike-title">Lac de Louvie</div>
+              <div class="hike-desc">Tyrkysové jezero schované za hřebenem. Trochu náročnější, ale výhled stojí za to. Jeden z nejhezčích výhledů v okolí.</div>
+            </div>
+          </a>
+          <a href="https://www.verbier.ch/en/sports-and-activities/summer-sports/hiking/cabane-du-mont-fort.html" target="_blank" class="hike-card">
+            <img class="hike-img" src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=600&q=80" alt="Cabane du Mont Fort" />
+            <div class="hike-body">
+              <div><span class="tag tg">Chata</span></div>
+              <div class="hike-title">Cabane du Mont Fort</div>
+              <div class="hike-desc">Legendární horská chata ve 2 457 m. Výhled, dobré jídlo, a pocit, že jsi opravdu v horách. Na celý den.</div>
+            </div>
+          </a>
         </div>
       </div></div>
     </div>
@@ -585,15 +709,44 @@
         <div class="chevron">›</div>
       </div>
       <div class="section-body"><div class="section-inner">
-        <p>V sobotu ráno 11. července vybíhám na <a href="https://utmb.world/races/stbernard" target="_blank">UTMB St. Bernard–Verbier</a>.</p>
-        <div class="race-stats">
-          <div class="rs"><span class="rs-val">77</span><span class="rs-lbl">km</span></div>
-          <div class="rs"><span class="rs-val">~5 000</span><span class="rs-lbl">metrů výšky</span></div>
-          <div class="rs"><span class="rs-val">~24h</span><span class="rs-lbl">na trati</span></div>
+        <p>V sobotu ráno 11. července vybíhám na <a href="https://verbier.utmb.world/races/x-traversee" target="_blank">UTMB X-Traversée</a> — 77 km a 5 000 výškových metrů přes 5 alpských sedel, od La Fouly do Verbier. Asi 24 hodin na trati.</p>
+
+        <div class="route-map">
+          <svg viewBox="0 0 560 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;">
+            <defs>
+              <linearGradient id="elev" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#C0DD97" stop-opacity="0.5"/>
+                <stop offset="100%" stop-color="#C0DD97" stop-opacity="0.05"/>
+              </linearGradient>
+            </defs>
+            <!-- elevation fill -->
+            <path d="M20,130 C40,125 55,110 70,95 C85,80 90,70 105,55 C112,48 118,52 125,60 C135,72 140,65 155,45 C162,36 168,40 178,50 C188,60 192,55 205,38 C212,30 218,34 228,44 C238,54 242,48 258,28 C265,19 272,24 282,35 C295,50 300,44 318,55 C330,63 335,58 350,42 C360,32 368,36 380,48 C392,60 398,54 415,62 C425,67 432,72 445,80 C455,86 462,90 478,100 C490,108 500,112 520,118 L520,145 L20,145 Z" fill="url(#elev)"/>
+            <!-- elevation line -->
+            <path d="M20,130 C40,125 55,110 70,95 C85,80 90,70 105,55 C112,48 118,52 125,60 C135,72 140,65 155,45 C162,36 168,40 178,50 C188,60 192,55 205,38 C212,30 218,34 228,44 C238,54 242,48 258,28 C265,19 272,24 282,35 C295,50 300,44 318,55 C330,63 335,58 350,42 C360,32 368,36 380,48 C392,60 398,54 415,62 C425,67 432,72 445,80 C455,86 462,90 478,100 C490,108 500,112 520,118" fill="none" stroke="#639922" stroke-width="2" stroke-linecap="round"/>
+            <!-- pass dots -->
+            <circle cx="105" cy="55" r="4" fill="#639922"/>
+            <circle cx="155" cy="45" r="4" fill="#639922"/>
+            <circle cx="205" cy="38" r="4" fill="#639922"/>
+            <circle cx="258" cy="28" r="4" fill="#3B6D11"/>
+            <circle cx="350" cy="42" r="4" fill="#639922"/>
+            <!-- start/end dots -->
+            <circle cx="20" cy="130" r="5" fill="#378ADD"/>
+            <circle cx="520" cy="118" r="5" fill="#BA7517"/>
+            <!-- labels -->
+            <text x="20" y="148" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="9" fill="#5F5E5A">La Fouly</text>
+            <text x="105" y="49" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="8" fill="#3B6D11">Fenêtre</text>
+            <text x="157" y="38" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="8" fill="#3B6D11">Gd St Bernard</text>
+            <text x="258" y="20" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="8" fill="#27500A">Avouillons</text>
+            <text x="258" y="12" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="7.5" fill="#27500A">nejvyšší bod</text>
+            <text x="350" y="36" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="8" fill="#3B6D11">Mille</text>
+            <text x="520" y="148" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="9" fill="#BA7517">Verbier</text>
+            <!-- distance label -->
+            <text x="280" y="158" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="8.5" fill="#888780">77 km · 5 000 m výšky · ~24 hodin</text>
+          </svg>
         </div>
-        <p>Poběžím do neděle 12. července do rána. Pokud neodstoupím někde ve třetí ranní na nějakém hřebeni — ale to se nestane.</p>
-        <div class="hl-amber">Tady přicházíš na scénu ty. Na několika aid stations se může mít závodník podporu zvenku — přineseš mi jídlo, pití, suché ponožky a opalovací krém. A na spoustu z nich dojedeš na kole. Jen aby se ti do batohu vešly moje náhradní ponožky.</div>
-        <p>Mezitím máš celou sobotu v Alpách, lanovky, kolo, hory. Mohlo by být hůř.</p>
+
+        <p>Poběžím do neděle 12. července do rána. Pokud neodstoupím někde ve tři ráno na nějakém hřebeni. Ale zkusím do té doby natrénovat.</p>
+        <div class="hl-amber">Tady se můžeš zapojit i ty. A ani nemusíš vůbec běžet! Na několika aid stations může mít závodník podporu zvenku. Někdo mi tak může přinést třeba bonbóny, čokoládu, pití, anebo třeba suché ponožky. Vzhledem k tomu, že je z aid station na aid station daleko a vysoko, máš mezitím i dost času na nějaký vlastní výlet.</div>
       </div></div>
     </div>
 
@@ -607,16 +760,20 @@
         <div class="chevron">›</div>
       </div>
       <div class="section-body"><div class="section-inner">
-        <p>V pondělí jedeme zpět. Já unavená, ty snad spokojený.</p>
-        <p>Doufám, že budeš s výletem spokojený. A já, že doběhnu.</p>
-        <div class="closing">
-          Mám tě ráda. Všechno nejlepší.<br>
-          <div class="closing-sig">B.</div>
-        </div>
+        <p>V pondělí jedeme zpět. Já vybíhaná, ty snad spokojený.</p>
       </div></div>
     </div>
 
-    <!-- Bonus divider -->
+  </div><!-- end .sections -->
+
+  <!-- Closing letter -->
+  <div class="closing-letter">
+    <p>Doufám, že se ti výlet bude líbit. A já, že doběhnu.</p>
+    <p>Mám tě ráda. Všechno nejlepší!</p>
+    <div class="closing-sig">Baru</div>
+  </div>
+
+  <div class="sections">
     <div class="bonus-divider"><span>Verbier — tipy</span></div>
 
     <!-- Kam na jídlo -->
@@ -631,17 +788,17 @@
       <div class="section-body"><div class="section-inner">
         <div class="sg">
           <div class="s">
-            <div><span class="tag ta">Doporučuju</span></div>
+            <div><span class="tag ta">Tip</span></div>
             <div class="s-title"><a href="https://www.lecarrefour-verbier.ch/" target="_blank">Le Carrefour</a></div>
             <div class="s-desc">Jedna z nejstarších restaurací v oblasti. Kamenné interiéry, terasa s výhledem na Alpy, místní víno. Rösti, grilované maso, fondue — švýcarská klasika bez turistické přirážky.</div>
           </div>
           <div class="s">
-            <div><span class="tag ta">Doporučuju</span></div>
+            <div><span class="tag ta">Tip</span></div>
             <div class="s-title"><a href="https://www.seeverbier.com/restaurants/les-chamois" target="_blank">Restaurant les Chamois</a></div>
             <div class="s-desc">Rustikální horská restaurace na Rue de Médran. Otevřený oheň, tradiční valaiská kuchyně, slunná terasa. Přesně to, co si člověk od švýcarské večeře představuje.</div>
           </div>
           <div class="s">
-            <div><span class="tag ta">Na pizzu</span></div>
+            <div><span class="tag ta">Tip</span></div>
             <div class="s-title"><a href="https://www.alcapone-verbier.com/en/" target="_blank">Al Capone</a></div>
             <div class="s-desc">Nejpopulárnější pizzerie ve Verbier — přes 25 druhů pizzy, příjemný personál, slunná terasa s výhledem na Combins massif. Na večer bez komplikací.</div>
           </div>
@@ -661,17 +818,17 @@
       <div class="section-body"><div class="section-inner">
         <div class="sg">
           <div class="s">
-            <div><span class="tag tp">Nejlepší pekárna</span></div>
+            <div><span class="tag tp">Tip</span></div>
             <div class="s-title"><a href="https://www.tripadvisor.com/Restaurant_Review-g198848-d23792243-Reviews-Clovis_Co-Verbier_Canton_of_Valais_Swiss_Alps.html" target="_blank">Clovis & Co</a></div>
             <div class="s-desc">Nejlepší croissanty ve Verbier — rovnou z trouby. Skvělá káva, příjemný personál, hned u lanovky. Povinná zastávka ráno před výletem.</div>
           </div>
           <div class="s">
-            <div><span class="tag tp">Klasika</span></div>
+            <div><span class="tag tp">Tip</span></div>
             <div class="s-title"><a href="https://www.seeverbier.com/cafes/milk-bar" target="_blank">Milk Bar</a></div>
             <div class="s-desc">Klidné místo s palačinkami, dorty, zmrzlinou a tarty. Dobrá horká čokoláda, příjemná atmosféra. Na odpolední pauzu po výletu.</div>
           </div>
           <div class="s">
-            <div><span class="tag tb">Švýcarský must</span></div>
+            <div><span class="tag tb">Tip</span></div>
             <div class="s-title"><a href="https://www.offshorecafe.com/" target="_blank">Offshore Café</a></div>
             <div class="s-desc">Legendární místo od roku 1986, skvělá káva a snídaně. Surfová atmosféra uprostřed Alp — trochu absurdní, ale prostě funguje. Hned u lanovky Medran.</div>
           </div>
@@ -691,17 +848,17 @@
       <div class="section-body"><div class="section-inner">
         <div class="sg">
           <div class="s">
-            <div><span class="tag tbeer">Doporučuju</span></div>
+            <div><span class="tag tbeer">Tip</span></div>
             <div class="s-title"><a href="https://www.pubmontfort.com/" target="_blank">Pub Mont Fort</a></div>
             <div class="s-desc">Od roku 1977. Točené pivo, živá hudba, terasa s výhledem. Oblíbené u místních i turistů — přesně ten typ pubu, kam se jde na jedno a zůstane se na tři.</div>
           </div>
           <div class="s">
-            <div><span class="tag tbeer">Taky dobrý</span></div>
+            <div><span class="tag tbeer">Tip</span></div>
             <div class="s-title"><a href="https://www.feracheval-verbier.ch/" target="_blank">Fer à Cheval</a></div>
             <div class="s-desc">Oblíbené u místních, výborné pizzy k pivu, živá atmosféra. Spíš restaurace než pub, ale večer se to hezky rozjede.</div>
           </div>
           <div class="s">
-            <div><span class="tag tbeer">Na klidnější večer</span></div>
+            <div><span class="tag tbeer">Tip</span></div>
             <div class="s-title"><a href="https://www.seeverbier.com/bars/alp-and-horn" target="_blank">Alp & Horn</a></div>
             <div class="s-desc">Relaxovaná atmosféra, dobré pivo, weekly pub quiz. Pokud chceš večer strávit v klidu bez davů — tohle je správná volba.</div>
           </div>
