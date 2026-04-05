@@ -505,12 +505,15 @@
 
     /* Route map */
     .route-map {
-      background: var(--bg-secondary);
+      display: block;
       border-radius: var(--radius-md);
-      padding: 1rem 0.5rem 0.25rem;
+      overflow: hidden;
       margin: 1rem 0;
       border: 0.5px solid var(--border);
+      text-decoration: none;
     }
+
+    .route-map:hover { opacity: 0.9; }
 
     /* Intro letter */
     .intro-letter {
@@ -709,43 +712,13 @@
         <div class="chevron">›</div>
       </div>
       <div class="section-body"><div class="section-inner">
-        <p>V sobotu ráno 11. července vybíhám na <a href="https://verbier.utmb.world/races/x-traversee" target="_blank">UTMB X-Traversée</a> — 77 km a 5 000 výškových metrů přes 5 alpských sedel, od La Fouly do Verbier. Asi 24 hodin na trati.</p>
+        <p>V sobotu ráno 11. července vybíhám na <a href="https://verbier.utmb.world/races/x-traversee" target="_blank">UTMB X-Traversée</a> — 77 km a 5 000 výškových metrů přes 5 alpských sedel, od La Fouly do Verbier. Předpokládám tak 18–24 hodin na trati.</p>
 
-        <div class="route-map">
-          <svg viewBox="0 0 560 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;">
-            <defs>
-              <linearGradient id="elev" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#C0DD97" stop-opacity="0.5"/>
-                <stop offset="100%" stop-color="#C0DD97" stop-opacity="0.05"/>
-              </linearGradient>
-            </defs>
-            <!-- elevation fill -->
-            <path d="M20,130 C40,125 55,110 70,95 C85,80 90,70 105,55 C112,48 118,52 125,60 C135,72 140,65 155,45 C162,36 168,40 178,50 C188,60 192,55 205,38 C212,30 218,34 228,44 C238,54 242,48 258,28 C265,19 272,24 282,35 C295,50 300,44 318,55 C330,63 335,58 350,42 C360,32 368,36 380,48 C392,60 398,54 415,62 C425,67 432,72 445,80 C455,86 462,90 478,100 C490,108 500,112 520,118 L520,145 L20,145 Z" fill="url(#elev)"/>
-            <!-- elevation line -->
-            <path d="M20,130 C40,125 55,110 70,95 C85,80 90,70 105,55 C112,48 118,52 125,60 C135,72 140,65 155,45 C162,36 168,40 178,50 C188,60 192,55 205,38 C212,30 218,34 228,44 C238,54 242,48 258,28 C265,19 272,24 282,35 C295,50 300,44 318,55 C330,63 335,58 350,42 C360,32 368,36 380,48 C392,60 398,54 415,62 C425,67 432,72 445,80 C455,86 462,90 478,100 C490,108 500,112 520,118" fill="none" stroke="#639922" stroke-width="2" stroke-linecap="round"/>
-            <!-- pass dots -->
-            <circle cx="105" cy="55" r="4" fill="#639922"/>
-            <circle cx="155" cy="45" r="4" fill="#639922"/>
-            <circle cx="205" cy="38" r="4" fill="#639922"/>
-            <circle cx="258" cy="28" r="4" fill="#3B6D11"/>
-            <circle cx="350" cy="42" r="4" fill="#639922"/>
-            <!-- start/end dots -->
-            <circle cx="20" cy="130" r="5" fill="#378ADD"/>
-            <circle cx="520" cy="118" r="5" fill="#BA7517"/>
-            <!-- labels -->
-            <text x="20" y="148" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="9" fill="#5F5E5A">La Fouly</text>
-            <text x="105" y="49" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="8" fill="#3B6D11">Fenêtre</text>
-            <text x="157" y="38" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="8" fill="#3B6D11">Gd St Bernard</text>
-            <text x="258" y="20" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="8" fill="#27500A">Avouillons</text>
-            <text x="258" y="12" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="7.5" fill="#27500A">nejvyšší bod</text>
-            <text x="350" y="36" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="8" fill="#3B6D11">Mille</text>
-            <text x="520" y="148" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="9" fill="#BA7517">Verbier</text>
-            <!-- distance label -->
-            <text x="280" y="158" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="8.5" fill="#888780">77 km · 5 000 m výšky · ~24 hodin</text>
-          </svg>
-        </div>
+        <a href="https://verbier.utmb.world/races/x-traversee" target="_blank" class="route-map">
+          <img src="./race-profile.png" alt="UTMB X-Traversée race profile" style="width:100%;display:block;border-radius:var(--radius-md);" />
+        </a>
 
-        <p>Poběžím do neděle 12. července do rána. Pokud neodstoupím někde ve tři ráno na nějakém hřebeni. Ale zkusím do té doby natrénovat.</p>
+        <p>Poběžím tedy do neděle 12. července do rána. Pokud neodstoupím někde ve tři ráno na nějakém hřebeni. Ale zkusím do té doby natrénovat.</p>
         <div class="hl-amber">Tady se můžeš zapojit i ty. A ani nemusíš vůbec běžet! Na několika aid stations může mít závodník podporu zvenku. Někdo mi tak může přinést třeba bonbóny, čokoládu, pití, anebo třeba suché ponožky. Vzhledem k tomu, že je z aid station na aid station daleko a vysoko, máš mezitím i dost času na nějaký vlastní výlet.</div>
       </div></div>
     </div>
@@ -760,7 +733,7 @@
         <div class="chevron">›</div>
       </div>
       <div class="section-body"><div class="section-inner">
-        <p>V pondělí jedeme zpět. Já vybíhaná, ty snad spokojený.</p>
+        <p>V pondělí jedeme zpět. Já vyběhaná, ty snad spokojený.</p>
       </div></div>
     </div>
 
@@ -769,7 +742,7 @@
   <!-- Closing letter -->
   <div class="closing-letter">
     <p>Doufám, že se ti výlet bude líbit. A já, že doběhnu.</p>
-    <p>Mám tě ráda. Všechno nejlepší!</p>
+    <p>Mám tě ráda. Všechno nejlepší, tatí!</p>
     <div class="closing-sig">Baru</div>
   </div>
 
