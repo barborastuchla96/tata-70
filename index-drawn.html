@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Za krávami a čokoládou</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Source+Sans+3:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #faf6ee;
+      --card: #fffdf8;
+      --ink: #2a2518;
+      --ink-soft: #7a7060;
+      --accent: #e07a30;
+      --accent-light: #fdecd8;
+      --accent-mid: #f0a060;
+      --green: #4a8c38;
+      --green-light: #e8f5e0;
+      --border: rgba(42,37,24,0.14);
+      --border-dark: rgba(42,37,24,0.28);
+      --radius: 12px;
+    }
+
+    html { font-size: 16px; }
+
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      font-weight: 400;
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      line-height: 1.7;
+    }
+
+    /* Subtle paper texture */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 20% 50%, rgba(224,122,48,0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(74,140,56,0.04) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      text-align: center;
+      padding: 2.5rem 1rem 2rem;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 8vw, 4.5rem);
+      font-weight: 700;
+      line-height: 1.05;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+    }
+
+    /* Hand-drawn underline under title */
+    .hero-title-wrap {
+      display: inline-block;
+      position: relative;
+    }
+
+    .hero-title-wrap::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0;
+      bottom: -6px;
+      height: 4px;
+      background: var(--accent);
+      border-radius: 2px;
+      transform: rotate(-0.5deg) scaleX(0.92);
+      transform-origin: left;
+      opacity: 0.7;
+    }
+
+    /* Illustrated mountain SVG */
+    .mountain-svg {
+      width: 100%;
+      max-width: 420px;
+      margin: 1.75rem auto 0;
+      display: block;
+    }
+
+    /* Timeline strip */
+    .timeline-strip {
+      margin: 2rem 0 0;
+      padding: 0 0.25rem;
+    }
+
+    .tl-track {
+      display: flex;
+      position: relative;
+    }
+
+    /* Wobbly hand-drawn line */
+    .tl-track::before {
+      content: '';
+      position: absolute;
+      top: 9px;
+      left: 10px;
+      right: 10px;
+      height: 2px;
+      background: var(--accent-mid);
+      border-radius: 2px;
+      opacity: 0.4;
+      transform: rotate(0.2deg);
+    }
+
+    .tl-step {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 7px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tl-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--card);
+      border: 2.5px solid var(--accent-mid);
+      flex-shrink: 0;
+    }
+
+    .tl-dot-race { border-color: var(--accent); background: var(--accent-light); }
+    .tl-dot-travel { border-color: var(--green); background: var(--green-light); }
+    .tl-dot-stop { border-color: var(--accent-mid); background: var(--accent-light); }
+
+    .tl-date {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--ink);
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .tl-label {
+      font-size: 10.5px;
+      color: var(--ink-soft);
+      text-align: center;
+      line-height: 1.35;
+    }
+
+    /* ── INTRO LETTER ── */
+    .intro-letter {
+      background: var(--card);
+      border: 2px solid var(--border-dark);
+      border-radius: var(--radius);
+      padding: 1.75rem 2rem;
+      margin-bottom: 1.75rem;
+      position: relative;
+      /* hand-drawn card feel */
+      box-shadow: 3px 4px 0 rgba(42,37,24,0.08);
+      transform: rotate(-0.3deg);
+    }
+
+    .intro-letter p {
+      font-size: 15.5px;
+      line-height: 1.85;
+      color: var(--ink);
+      margin-bottom: 0.75rem;
+    }
+
+    .intro-letter p:last-child { margin-bottom: 0; }
+    .intro-tease { color: var(--ink-soft) !important; font-style: italic; }
+
+    /* ── SECTIONS ── */
+    .sections { display: flex; flex-direction: column; gap: 1rem; }
+
+    .section-block {
+      background: var(--card);
+      border: 2px solid var(--border-dark);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 3px 4px 0 rgba(42,37,24,0.07);
+      /* slight rotation for hand-drawn feel, alternating */
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+
+    .section-block:nth-child(odd) { transform: rotate(0.15deg); }
+    .section-block:nth-child(even) { transform: rotate(-0.15deg); }
+    .section-block:hover { box-shadow: 4px 6px 0 rgba(42,37,24,0.1); transform: rotate(0deg) translateY(-1px); }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.9rem 1.25rem;
+      cursor: pointer;
+      user-select: none;
+      background: transparent;
+      gap: 12px;
+    }
+
+    .section-meta { display: flex; align-items: center; gap: 10px; }
+
+    .section-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 16px;
+      background: var(--accent-light);
+      border: 1.5px solid var(--accent-mid);
+    }
+
+    .section-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 13px;
+      color: var(--accent);
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      margin-bottom: 1px;
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.2;
+    }
+
+    .chevron {
+      font-size: 20px;
+      color: var(--accent);
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .section-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .section-body.open { max-height: 2000px; }
+
+    .section-inner {
+      padding: 1.25rem 1.5rem 1.75rem;
+      border-top: 1.5px dashed var(--border-dark);
+    }
+
+    .section-inner p {
+      font-size: 15px;
+      line-height: 1.85;
+      color: var(--ink);
+      margin-bottom: 0.85rem;
+    }
+
+    .section-inner p:last-child { margin-bottom: 0; }
+
+    /* ── HIGHLIGHT BOX ── */
+    .hl-amber {
+      background: var(--accent-light);
+      border: 1.5px dashed var(--accent-mid);
+      border-radius: 8px;
+      padding: 0.9rem 1.1rem;
+      margin: 1rem 0;
+      font-size: 14px;
+      color: var(--ink);
+      line-height: 1.7;
+    }
+
+    /* ── OPTIONS ── */
+    .option-grid { display: flex; flex-direction: column; gap: 8px; margin: 1rem 0; }
+
+    .option {
+      border: 1.5px solid var(--border-dark);
+      border-radius: 8px;
+      padding: 0.9rem 1rem;
+      background: var(--bg);
+    }
+
+    .option-a { border-color: var(--green); background: var(--green-light); }
+    .option-b { background: #eef6ff; border-color: #7ab0e0; }
+
+    .option-tag {
+      display: inline-block;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    .option-title { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 3px; }
+    .option-title a { color: var(--ink); text-decoration-color: var(--accent-mid); }
+    .option-title a:hover { color: var(--accent); }
+    .option-desc { font-size: 13px; color: var(--ink-soft); line-height: 1.6; }
+
+    /* ── HIKE GRID ── */
+    .hike-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin: 1rem 0;
+    }
+
+    .hike-card {
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--bg);
+      text-decoration: none;
+      display: block;
+      border: 1.5px solid var(--border-dark);
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 2px 3px 0 rgba(42,37,24,0.07);
+    }
+
+    .hike-card:hover {
+      transform: translateY(-2px) rotate(0deg);
+      box-shadow: 3px 5px 0 rgba(42,37,24,0.12);
+    }
+
+    .hike-img {
+      width: 100%;
+      height: 110px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .hike-body { padding: 0.65rem 0.75rem; }
+
+    .hike-tag {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .hike-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 3px;
+    }
+
+    .hike-desc { font-size: 11px; color: var(--ink-soft); line-height: 1.45; }
+
+    @media (max-width: 480px) { .hike-grid { grid-template-columns: 1fr; } }
+
+    /* ── ROUTE MAP ── */
+    .route-map {
+      display: block;
+      border: 1.5px solid var(--border-dark);
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 1.25rem 0;
+      text-decoration: none;
+      box-shadow: 2px 3px 0 rgba(42,37,24,0.07);
+      transition: box-shadow 0.2s;
+    }
+
+    .route-map:hover { box-shadow: 3px 5px 0 rgba(42,37,24,0.12); }
+    .route-map img { width: 100%; display: block; }
+
+    /* ── TIP CARDS ── */
+    .sg { display: flex; flex-direction: column; gap: 8px; margin: 0.75rem 0; }
+
+    .s {
+      background: var(--bg);
+      border: 1.5px solid var(--border-dark);
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+      box-shadow: 2px 2px 0 rgba(42,37,24,0.05);
+    }
+
+    .s-title { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 3px; }
+    .s-title a { color: var(--ink); text-decoration-color: var(--accent-mid); }
+    .s-title a:hover { color: var(--accent); }
+    .s-desc { font-size: 13px; color: var(--ink-soft); line-height: 1.55; }
+
+    .tag {
+      display: inline-block;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 4px;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── DIVIDER ── */
+    .bonus-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 2.5rem 0 1.25rem;
+    }
+
+    .bonus-divider::before, .bonus-divider::after {
+      content: '';
+      flex: 1;
+      height: 2px;
+      background: var(--accent-mid);
+      border-radius: 2px;
+      opacity: 0.3;
+    }
+
+    .bonus-divider span {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    /* ── CLOSING LETTER ── */
+    .closing-letter {
+      background: var(--card);
+      border: 2px solid var(--border-dark);
+      border-radius: var(--radius);
+      padding: 1.75rem 2rem;
+      margin: 1.5rem 0;
+      text-align: center;
+      box-shadow: 3px 4px 0 rgba(42,37,24,0.08);
+      transform: rotate(0.2deg);
+    }
+
+    .closing-letter p {
+      font-size: 15.5px;
+      line-height: 1.85;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+    }
+
+    .closing-sig {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-top: 0.75rem;
+      display: block;
+    }
+
+    a { color: var(--accent); }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">Táta · narozeniny</div>
+    <div class="hero-title-wrap">
+      <div class="hero-title">Za krávami a čokoládou</div>
+    </div>
+
+    <!-- Illustrated mountains -->
+    <svg class="mountain-svg" viewBox="0 0 420 120" xmlns="http://www.w3.org/2000/svg">
+      <!-- sky -->
+      <circle cx="60" cy="28" r="14" fill="#fdecd8" opacity="0.8"/>
+      <circle cx="78" cy="18" r="20" fill="#fdecd8" opacity="0.8"/>
+      <circle cx="96" cy="25" r="13" fill="#fdecd8" opacity="0.6"/>
+      <!-- mountains -->
+      <polygon points="210,8 295,100 125,100" fill="#4a8c38" opacity="0.55"/>
+      <polygon points="295,30 365,100 225,100" fill="#6aaa54" opacity="0.4"/>
+      <polygon points="125,48 188,100 62,100" fill="#3a7028" opacity="0.4"/>
+      <!-- snow caps -->
+      <polygon points="210,8 228,40 192,40" fill="white" opacity="0.75"/>
+      <polygon points="295,30 308,52 282,52" fill="white" opacity="0.55"/>
+      <!-- ground line (wobbly) -->
+      <path d="M0,100 Q105,96 210,100 Q315,104 420,100" fill="none" stroke="#4a8c38" stroke-width="2" opacity="0.35" stroke-linecap="round"/>
+      <!-- little cow doodle -->
+      <ellipse cx="340" cy="96" rx="12" ry="7" fill="#fdecd8" stroke="#2a2518" stroke-width="1.2"/>
+      <circle cx="335" cy="90" r="5" fill="#fdecd8" stroke="#2a2518" stroke-width="1.2"/>
+      <line x1="332" y1="103" x2="332" y2="110" stroke="#2a2518" stroke-width="1.2"/>
+      <line x1="338" y1="103" x2="338" y2="110" stroke="#2a2518" stroke-width="1.2"/>
+      <line x1="344" y1="103" x2="344" y2="110" stroke="#2a2518" stroke-width="1.2"/>
+      <line x1="350" y1="103" x2="350" y2="110" stroke="#2a2518" stroke-width="1.2"/>
+      <!-- little pine tree -->
+      <polygon points="55,80 62,60 69,80" fill="#4a8c38" opacity="0.7"/>
+      <rect x="60" y="79" width="4" height="6" fill="#7a5030" opacity="0.7"/>
+      <polygon points="48,82 55,64 62,82" fill="#3a7028" opacity="0.5"/>
+    </svg>
+
+    <!-- Timeline -->
+    <div class="timeline-strip">
+      <div class="tl-track">
+        <div class="tl-step">
+          <div class="tl-dot tl-dot-travel"></div>
+          <div class="tl-date">7. 7.</div>
+          <div class="tl-label">odjezd<br>z Prahy</div>
+        </div>
+        <div class="tl-step">
+          <div class="tl-dot tl-dot-stop"></div>
+          <div class="tl-date">8. 7.</div>
+          <div class="tl-label">výlet cestou<br>& příjezd</div>
+        </div>
+        <div class="tl-step">
+          <div class="tl-dot tl-dot-travel"></div>
+          <div class="tl-date">9–10. 7.</div>
+          <div class="tl-label">výlety<br>& jídlo</div>
+        </div>
+        <div class="tl-step">
+          <div class="tl-dot tl-dot-race"></div>
+          <div class="tl-date">11. 7.</div>
+          <div class="tl-label">vybíhám</div>
+        </div>
+        <div class="tl-step">
+          <div class="tl-dot tl-dot-race"></div>
+          <div class="tl-date">12. 7.</div>
+          <div class="tl-label">dobíhám<br>(doufám)</div>
+        </div>
+        <div class="tl-step">
+          <div class="tl-dot tl-dot-travel"></div>
+          <div class="tl-date">13. 7.</div>
+          <div class="tl-label">návrat<br>domů</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTRO LETTER -->
+  <div class="intro-letter">
+    <p>Čau tatí,</p>
+    <p>takový narozeniny, to si zaslouží pořádný dárek! A mně moc záleží na tom, abychom spolu trávili čas — takže jsem to spojila dohromady.</p>
+    <p>Zvu tě na malý letní výlet. Se mnou 😄</p>
+    <p class="intro-tease">Hory, výlety, nějaká čokoláda a fondue, krávy...už víš, kam to bude?</p>
+  </div>
+
+  <!-- SECTIONS -->
+  <div class="sections">
+
+    <div class="section-block">
+      <div class="section-header" onclick="toggle(this)">
+        <div class="section-meta">
+          <div class="section-icon">🚗</div>
+          <div>
+            <div class="section-label">úterý 7. 7.</div>
+            <div class="section-title">Cesta tam</div>
+          </div>
+        </div>
+        <div class="chevron">›</div>
+      </div>
+      <div class="section-body"><div class="section-inner">
+        <p>Vyrazíme v úterý 7. července odpoledne, přespíme někde cestou a ve středu uděláme zastávku na výlet. Ještě jsem nic nebookovala — domluvme se, která cesta bude nejlepší. Navrhuji jet přes Německo spodem a zastavit na noc někde u Bodensee.</p>
+      </div></div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-header" onclick="toggle(this)">
+        <div class="section-meta">
+          <div class="section-icon">🏔️</div>
+          <div>
+            <div class="section-label">středa 8. 7.</div>
+            <div class="section-title">Výlet cestou a příjezd na místo</div>
+          </div>
+        </div>
+        <div class="chevron">›</div>
+      </div>
+      <div class="section-body"><div class="section-inner">
+        <p>Máme dvě možnosti. Vyber si:</p>
+        <div class="option-grid">
+          <div class="option option-a">
+            <div class="option-tag">→ Možnost A</div>
+            <div class="option-title"><a href="https://www.lauterbrunnen.swiss/en/" target="_blank">Lauterbrunnen</a></div>
+            <div class="option-desc">Údolí pod Eigerem, plné vodopádů. Lehká procházka údolím a pak káva a dort v centru vesnice.</div>
+          </div>
+          <div class="option option-b">
+            <div class="option-tag">→ Možnost B</div>
+            <div class="option-title"><a href="https://www.interlaken.ch/en" target="_blank">Interlaken</a></div>
+            <div class="option-desc">To už je 20 let, co jsme tam byli, ne? Procházka k jezeru a káva a dort. Klasika, ale fajn klasika.</div>
+          </div>
+        </div>
+        <p>Odpoledne vyrazíme dál a večer dorazíme do cíle — do Verbier. Čeká na nás <a href="https://www.bristol-verbier.ch/" target="_blank">hotel se snídaní</a>!</p>
+      </div></div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-header" onclick="toggle(this)">
+        <div class="section-meta">
+          <div class="section-icon">🥾</div>
+          <div>
+            <div class="section-label">čtvrtek 9. 7. a pátek 10. 7.</div>
+            <div class="section-title">Kam na výlet</div>
+          </div>
+        </div>
+        <div class="chevron">›</div>
+      </div>
+      <div class="section-body"><div class="section-inner">
+        <p>Verbier je v létě výletní ráj. Lanovky fungují, turistické trasy jsou otevřené, krav je dostatek. Žádné dlouhé túry, ale možností je spoustu, například:</p>
+        <div class="hike-grid">
+          <a href="https://www.verbier.ch/en/discover/explore-activities/pierre-avoi-col-des-mines-bisse-du-levron-verbier-verbier-en-2788332/" target="_blank" class="hike-card">
+            <img class="hike-img" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80" alt="Pierre Avoi" />
+            <div class="hike-body">
+              <span class="hike-tag">↑ Výstup</span>
+              <div class="hike-title">Pierre Avoi</div>
+              <div class="hike-desc">360° výhled na Mont Blanc i Matterhorn. Lanovkou nahoru, pěšky na vrchol.</div>
+            </div>
+          </a>
+          <a href="https://www.verbier.ch/summer/offers/lac-des-vaux-verbier-en-summer-2788098/" target="_blank" class="hike-card">
+            <img class="hike-img" src="https://images.unsplash.com/photo-1470770903676-69b98201ea1c?w=600&q=80" alt="Lac des Vaux" />
+            <div class="hike-body">
+              <span class="hike-tag">~ Jezero</span>
+              <div class="hike-title">Lac des Vaux</div>
+              <div class="hike-desc">Modré alpské jezero. Lanovkou nahoru, krátká túra. Ideální na piknik.</div>
+            </div>
+          </a>
+          <a href="https://www.verbier.ch/en/discover/explore-activities/sports-activities/walks-and-hikes/all-hiking-routes-and-walks/tour-des-bisses-verbier-en-3153370/" target="_blank" class="hike-card">
+            <img class="hike-img" src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&q=80" alt="Bisse du Levron" />
+            <div class="hike-body">
+              <span class="hike-tag">→ Procházka</span>
+              <div class="hike-title">Bisse du Levron</div>
+              <div class="hike-desc">Rovná cesta loukami s výhledem na celé údolí. Žádné stoupání.</div>
+            </div>
+          </a>
+          <a href="https://www.verbier.ch/en/offers/lac-de-louvie-verbier-en-2788304/" target="_blank" class="hike-card">
+            <img class="hike-img" src="https://images.unsplash.com/photo-1501854140801-50d01698950b?w=600&q=80" alt="Lac de Louvie" />
+            <div class="hike-body">
+              <span class="hike-tag">~ Jezero</span>
+              <div class="hike-title">Lac de Louvie</div>
+              <div class="hike-desc">Tyrkysové jezero za hřebenem. Trochu náročnější, ale výhled stojí za to.</div>
+            </div>
+          </a>
+          <a href="https://www.verbier.ch/en/practice/stay-accommodation-and-workation/cabane-mont-fort-verbier-en-2923553/" target="_blank" class="hike-card">
+            <img class="hike-img" src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=600&q=80" alt="Cabane du Mont Fort" />
+            <div class="hike-body">
+              <span class="hike-tag">⌂ Chata</span>
+              <div class="hike-title">Cabane du Mont Fort</div>
+              <div class="hike-desc">Legendární horská chata ve 2 457 m. Na celý den.</div>
+            </div>
+          </a>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-header" onclick="toggle(this)">
+        <div class="section-meta">
+          <div class="section-icon">🏃</div>
+          <div>
+            <div class="section-label">sobota 11. 7.</div>
+            <div class="section-title">Jo, a já tam taky poběžím závod</div>
+          </div>
+        </div>
+        <div class="chevron">›</div>
+      </div>
+      <div class="section-body"><div class="section-inner">
+        <p>V sobotu ráno 11. července vybíhám na <a href="https://verbier.utmb.world/races/x-traversee" target="_blank">UTMB X-Traversée</a> — 77 km a 5 000 výškových metrů přes 5 alpských sedel, od La Fouly do Verbier. Předpokládám tak 18–24 hodin na trati.</p>
+        <a href="https://verbier.utmb.world/races/x-traversee" target="_blank" class="route-map">
+          <img src="./race-profile.png" alt="UTMB X-Traversée race profile" />
+        </a>
+        <p>Poběžím tedy do neděle 12. července do rána. Pokud neodstoupím někde ve tři ráno na nějakém hřebeni. Ale zkusím do té doby natrénovat.</p>
+        <div class="hl-amber">Tady se můžeš zapojit i ty. A ani nemusíš vůbec běžet! Na několika aid stations může mít závodník podporu zvenku. Někdo mi tak může přinést třeba bonbóny, čokoládu, pití, anebo třeba suché ponožky. Vzhledem k tomu, že je z aid station na aid station daleko a vysoko, máš mezitím i dost času na nějaký vlastní výlet.</div>
+        <p>No a v pondělí pojedeme zpět. Já vyběhaná, ty snad spokojený.</p>
+      </div></div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-header" onclick="toggle(this)">
+        <div class="section-meta">
+          <div class="section-icon">💚</div>
+          <div>
+            <div class="section-label">pondělí 13. 7.</div>
+            <div class="section-title">A na závěr</div>
+          </div>
+        </div>
+        <div class="chevron">›</div>
+      </div>
+      <div class="section-body"><div class="section-inner">
+        <p>V pondělí jedeme zpět. Já vyběhaná, ty snad spokojený.</p>
+      </div></div>
+    </div>
+
+  </div>
+
+  <!-- CLOSING -->
+  <div class="closing-letter">
+    <p>Doufám, že se ti výlet bude líbit. A já, že doběhnu.</p>
+    <p>Mám tě ráda. Všechno nejlepší, tatí!</p>
+    <span class="closing-sig">Baru</span>
+  </div>
+
+  <!-- VERBIER TIPS -->
+  <div class="sections">
+    <div class="bonus-divider"><span>✦ Verbier — tipy ✦</span></div>
+
+    <div class="section-block">
+      <div class="section-header" onclick="toggle(this)">
+        <div class="section-meta">
+          <div class="section-icon">🍷</div>
+          <div>
+            <div class="section-label">Verbier</div>
+            <div class="section-title">Kam na jídlo</div>
+          </div>
+        </div>
+        <div class="chevron">›</div>
+      </div>
+      <div class="section-body"><div class="section-inner">
+        <div class="sg">
+          <div class="s">
+            <span class="tag">Tip →</span>
+            <div class="s-title"><a href="https://www.lecarrefour-verbier.ch/" target="_blank">Le Carrefour</a></div>
+            <div class="s-desc">Jedna z nejstarších restaurací v oblasti. Rösti, fondue, místní víno. Švýcarská klasika bez turistické přirážky.</div>
+          </div>
+          <div class="s">
+            <span class="tag">Tip →</span>
+            <div class="s-title"><a href="https://www.seeverbier.com/restaurants/les-chamois" target="_blank">Restaurant les Chamois</a></div>
+            <div class="s-desc">Rustikální horská restaurace. Otevřený oheň, tradiční valaiská kuchyně, slunná terasa.</div>
+          </div>
+          <div class="s">
+            <span class="tag">Tip →</span>
+            <div class="s-title"><a href="https://www.alcapone-verbier.com/en/" target="_blank">Al Capone</a></div>
+            <div class="s-desc">Nejpopulárnější pizzerie ve Verbier. Přes 25 druhů pizzy, slunná terasa s výhledem.</div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-header" onclick="toggle(this)">
+        <div class="section-meta">
+          <div class="section-icon">☕</div>
+          <div>
+            <div class="section-label">Verbier</div>
+            <div class="section-title">Kam na kafe</div>
+          </div>
+        </div>
+        <div class="chevron">›</div>
+      </div>
+      <div class="section-body"><div class="section-inner">
+        <div class="sg">
+          <div class="s">
+            <span class="tag">Tip →</span>
+            <div class="s-title"><a href="https://www.tripadvisor.com/Restaurant_Review-g198848-d23792243-Reviews-Clovis_Co-Verbier_Canton_of_Valais_Swiss_Alps.html" target="_blank">Clovis & Co</a></div>
+            <div class="s-desc">Nejlepší croissanty ve Verbier — rovnou z trouby. Skvělá káva, hned u lanovky.</div>
+          </div>
+          <div class="s">
+            <span class="tag">Tip →</span>
+            <div class="s-title"><a href="https://www.seeverbier.com/cafes/milk-bar" target="_blank">Milk Bar</a></div>
+            <div class="s-desc">Palačinky, dorty, zmrzlina, horká čokoláda. Na odpolední pauzu po výletu.</div>
+          </div>
+          <div class="s">
+            <span class="tag">Tip →</span>
+            <div class="s-title"><a href="https://www.offshorecafe.com/" target="_blank">Offshore Café</a></div>
+            <div class="s-desc">Legendární místo od roku 1986. Surfová atmosféra uprostřed Alp. Hned u lanovky Medran.</div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-header" onclick="toggle(this)">
+        <div class="section-meta">
+          <div class="section-icon">🍺</div>
+          <div>
+            <div class="section-label">Verbier</div>
+            <div class="section-title">Kam na pivo</div>
+          </div>
+        </div>
+        <div class="chevron">›</div>
+      </div>
+      <div class="section-body"><div class="section-inner">
+        <div class="sg">
+          <div class="s">
+            <span class="tag">Tip →</span>
+            <div class="s-title"><a href="https://www.pubmontfort.com/" target="_blank">Pub Mont Fort</a></div>
+            <div class="s-desc">Od roku 1977. Točené pivo, živá hudba, terasa. Kam se jde na jedno a zůstane se na tři.</div>
+          </div>
+          <div class="s">
+            <span class="tag">Tip →</span>
+            <div class="s-title"><a href="https://www.feracheval-verbier.ch/" target="_blank">Fer à Cheval</a></div>
+            <div class="s-desc">Oblíbené u místních, výborné pizzy k pivu. Večer se to hezky rozjede.</div>
+          </div>
+          <div class="s">
+            <span class="tag">Tip →</span>
+            <div class="s-title"><a href="https://www.seeverbier.com/bars/alp-and-horn" target="_blank">Alp & Horn</a></div>
+            <div class="s-desc">Relaxovaná atmosféra, dobré pivo, weekly pub quiz. Na klidnější večer bez davů.</div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function toggle(header) {
+    const body = header.nextElementSibling;
+    const chevron = header.querySelector('.chevron');
+    const isOpen = body.classList.contains('open');
+    body.classList.toggle('open', !isOpen);
+    chevron.style.transform = isOpen ? '' : 'rotate(90deg)';
+  }
+</script>
+</body>
+</html>
